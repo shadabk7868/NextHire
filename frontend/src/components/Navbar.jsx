@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white border-b">
+      <header className="bg-white border-b sticky top-0 z-50">
         <div className="lg:px-[130px] px-6 flex justify-between items-center h-[80px]">
 
           {/* LOGO */}

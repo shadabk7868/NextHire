@@ -11,8 +11,8 @@ node_modules
 
 # for update
 git add .
-git commit -m "commit msg"
+git commit -m "second msg"
 git branch -M main
-git remote add origin https://github.com/shadabk7868/jobportal.git
+git remote add origin https://github.com/shadabk7868/main-jobportal
 git push -u origin main
 # https://github.com/shadabk7868/jobportal

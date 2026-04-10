@@ -1,48 +1,49 @@
 const mongoose = require("mongoose");
-
-const employerSchema = new mongoose.Schema({
-    logo: {filename: String,url: String},
-    companyName: {type: String, required: true},
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    phone: String,
+ 
+let employerSchema = new mongoose.Schema({
+    name: String,
+    image: { filename: String, url: String },
+    coverImage: { filename: String, url: String },
+    email: { type: String, required: true, unique: true },
+    password:{type:String,required:true},
+    phoneNumber: Number,
+    category: String,
     website: String,
-
-    establishedSince: Date,
-    teamSize: String, 
-    industry: [String], // multiple select (Retail, IT, etc.)
-
-    allowInSearch: {
-        type: Boolean,
-        default: true
-    },
-
-    aboutCompany: {
-        type: String
-    },
-
+    industryType: String,
+    foundedIn: Date,
+    teamSize: Number,
+    about: String,
     address: {
         country: String,
         state: String,
         city: String,
         area: String,
         fullAddress: String
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    postedJobs: [
-        { jobId: {
+    }, jobs: [
+        {
+            jobId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "jobs"
-            },
-            _id: false }
+                ref: "jobs",
+            }
+        }
+    ],
+    allAplicants: [
+        {
+            applicantId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "users",
+            }
+        }
+    ],
+    shortListed: [
+        {
+            shortListedApplicantId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "users",
+            }
+        }
     ]
-}, { timestamps: true });
-
-const Employer = mongoose.model("employers", employerSchema);
-module.exports = Employer;
+}, { timestamps: true })
+let employerModel = mongoose.model("employers", employerSchema);
+ 
+module.exports = employerModel

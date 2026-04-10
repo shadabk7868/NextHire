@@ -2,13 +2,15 @@ import Navbar from "../components/Navbar";
 import {
   FaHome,
   FaUser,
-  FaPlusCircle,
+  FaFileUpload,
   FaBriefcase,
-  FaUsers,
+  FaBell,
+  FaHeart,
   FaFileAlt,
   FaLock,
   FaSignOutAlt,
   FaTrash,
+  FaClipboardList,
 } from "react-icons/fa";
 
 export default function CandidateDashboard() {
@@ -33,29 +35,33 @@ export default function CandidateDashboard() {
             {/* MENU ITEMS */}
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
               <FaUser />
-              <span>Company Profile</span>
+              <span>My Profile</span>
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
-              <FaPlusCircle />
-              <span>Post A New Job</span>
+              <FaFileUpload />
+              <span>My Resume</span>
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
-              <FaBriefcase />
-              <span>Manage Jobs</span>
+              <FaClipboardList />
+              <span>Applied Jobs</span>
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
-              <FaUsers />
-              <span>All Applicants</span>
+              <FaBell />
+              <span>Job Alert</span>
+            </div>
+
+            <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
+              <FaHeart />
+              <span>Shortlisted Jobs</span>
             </div>
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
               <FaFileAlt />
-              <span>Shortlisted Resumes</span>
+              <span>Cv Manager</span>
             </div>
-
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
               <FaLock />
@@ -94,7 +100,7 @@ export default function CandidateDashboard() {
               
               <div>
                 <h2 className="text-3xl font-bold text-blue-600">22</h2>
-                <p className="text-gray-500 text-sm mt-1">Posted Jobs</p>
+                <p className="text-gray-500 text-sm mt-1">Applied Jobs</p>
               </div>
 
               <div className="bg-blue-100 p-4 rounded-xl text-blue-600 text-xl">
@@ -107,8 +113,8 @@ export default function CandidateDashboard() {
             <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between">
               
               <div>
-                <h2 className="text-3xl font-bold text-red-500">9382</h2>
-                <p className="text-gray-500 text-sm mt-1">Applications</p>
+                <h2 className="text-3xl font-bold text-red-500">930</h2>
+                <p className="text-gray-500 text-sm mt-1">Job Alerts</p>
               </div>
 
               <div className="bg-red-100 p-4 rounded-xl text-red-500 text-xl">
@@ -123,4 +129,4 @@ export default function CandidateDashboard() {
       </div>
     </div>
   );
-}
+}``
