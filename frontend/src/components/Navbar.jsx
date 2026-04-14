@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="bg-white border-b sticky top-0 z-50">
+      <header className="bg-white sticky top-0 z-50">
         <div className="lg:px-[130px] px-6 flex justify-between items-center h-[80px]">
 
           {/* LOGO */}
@@ -44,7 +44,7 @@ export default function Navbar() {
 
                 {/* DROPDOWN */}
                 {item.sub.length > 0 && openMenu === idx && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50"
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50"
                     onMouseLeave={() => setOpenMenu(null)}>
 
                     {item.sub.map((subItem, i) => {

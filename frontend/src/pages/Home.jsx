@@ -75,12 +75,12 @@ export default function Home() {
 
         <input
           placeholder="Job title, keywords, or company"
-          className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px] outline-none border-b md:border-b-0 md:border-r"
+          className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px]  md:border-b-0 md:border-r"
         />
 
         <input
           placeholder="City or postcode"
-          className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px] outline-none border-b md:border-b-0 md:border-r"
+          className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px]   md:border-b-0 md:border-r"
         />
 
         <button className="bg-blue-600 text-white px-8 h-[50px] md:h-[50px] text-[14px] font-medium rounded-md md:ml-2 mt-2 md:mt-0 hover:bg-blue-700 transition w-full md:w-auto">
