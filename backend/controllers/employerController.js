@@ -90,7 +90,7 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
     foundedIn,
     teamSize,
     about,
-    address, // 👈 object from frontend
+    address,
   } = req.body;
 
   let files = req.files;
@@ -104,7 +104,7 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
     });
   }
 
-  /* 🔥 HANDLE LOGO */
+
   let image = employer.image;
   if (files?.logo) {
     image = {
@@ -113,7 +113,6 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
     };
   }
 
-  /* 🔥 HANDLE COVER IMAGE */
   let coverImage = employer.coverImage;
   if (files?.coverImage) {
     coverImage = {
@@ -122,7 +121,6 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
     };
   }
 
-  /* 🔥 UPDATE */
   let updated = await Employer.findByIdAndUpdate(
     id,
     {
