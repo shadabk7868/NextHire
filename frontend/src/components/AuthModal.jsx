@@ -24,7 +24,6 @@ export default function AuthModal({ onClose }) {
 
       if (data.success) {
 
-        // 👉 REGISTER CASE
         if (!isLogin) {
           alert("Registered successfully, please login");
           setIsLogin(true);

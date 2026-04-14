@@ -3,134 +3,198 @@ const bcrypt = require("bcrypt");
 const Employer = require("../models/employerModel");
 const { genrateToken } = require("../utils/generateToken");
 
-// REGISTER
-let registerEmployer = AsyncHandler(async(req,res)=>{
-    let {name,email,password,phoneNumber,industryType}=req.body;
+/* ================= REGISTER ================= */
+let registerEmployer = AsyncHandler(async (req, res) => {
+  let { name, email, password, phoneNumber, industryType } = req.body;
 
-    if(!name || !email || !password){
-        return res.status(400).json({
-            success:false,
-            message:"All fields required"
-        })
-    }
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields required",
+    });
+  }
 
-    let exist = await Employer.findOne({email});
+  let exist = await Employer.findOne({ email });
 
-    if(exist){
-        return res.status(400).json({
-            success:false,
-            message:"Employer already exists"
-        })
-    }
+  if (exist) {
+    return res.status(400).json({
+      success: false,
+      message: "Employer already exists",
+    });
+  }
 
-    let hashedPassword = await bcrypt.hash(password,10);
+  let hashedPassword = await bcrypt.hash(password, 10);
 
-    let employer = await Employer.create({
-        name,
-        email,
-        password:hashedPassword,
-        phoneNumber,
-        industryType
-    })
+  let employer = await Employer.create({
+    name,
+    email,
+    password: hashedPassword,
+    phoneNumber,
+    industryType,
+  });
 
-    let data = employer.toObject();
-    delete data.password;
+  res.status(201).json({
+    success: true,
+    message: "Employer Registered",
+  });
+});
 
-    res.status(201).json({
-        success:true,
-        message:"Employer Registered",
-        data
-    })
-})
+/* ================= LOGIN ================= */
+let loginEmployer = AsyncHandler(async (req, res) => {
+  let { email, password } = req.body;
 
-// LOGIN
-let loginEmployer = AsyncHandler(async(req,res)=>{
-    let {email,password}=req.body;
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email & password required",
+    });
+  }
 
-    let employer = await Employer.findOne({email});
+  let employer = await Employer.findOne({ email });
 
-    if(!employer){
-        return res.status(404).json({
-            success:false,
-            message:"Employer not found"
-        })
-    }
-
-    let match = await bcrypt.compare(password, employer.password);
-
-    if(!match){
-        return res.status(400).json({
-            success:false,
-            message:"Invalid Password"
-        })
-    }
-
-    let token = genrateToken({id: employer._id},"1h");
-
-    let data = employer.toObject();
-    delete data.password;
-
-    res.status(200).json({
-        success:true,
-        token,
-        data
-    })
-})
-
-// UPDATE
-let updateEmployerProfile = AsyncHandler(async(req,res)=>{
- let updated = await Employer.findByIdAndUpdate(
-    req.user.id,
-    req.body,
-    {new:true}
- )
-
- res.status(200).json({
-    success:true,
-    data:updated
- })
-})
-
-// GET PROFILE
-let getEmployerProfile = AsyncHandler(async(req,res)=>{
- let employer = await Employer.findById(req.user.id).select("-password");
-
- if(!employer){
+  if (!employer) {
     return res.status(404).json({
-        success:false,
-        message:"Employer not found"
-    })
- }
+      success: false,
+      message: "Employer not found",
+    });
+  }
 
- res.status(200).json({
-    success:true,
-    data:employer
- })
-})
+  let match = await bcrypt.compare(password, employer.password);
 
-// DELETE
-let deleteEmployer = AsyncHandler(async(req,res)=>{
- let employer = await Employer.findById(req.user.id);
+  if (!match) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Password",
+    });
+  }
 
- if(!employer){
+  let token = await genrateToken({ id: employer._id }, "1h");
+
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    token,
+  });
+});
+
+/* ================= UPDATE PROFILE ================= */
+let updateEmployerProfile = AsyncHandler(async (req, res) => {
+  let id = req.user.id;
+
+  let {
+    name,
+    phoneNumber,
+    website,
+    category,
+    industryType,
+    foundedIn,
+    teamSize,
+    about,
+    address, // 👈 object from frontend
+  } = req.body;
+
+  let files = req.files;
+
+  let employer = await Employer.findById(id);
+
+  if (!employer) {
     return res.status(404).json({
-        success:false,
-        message:"Employer not found"
-    })
- }
+      success: false,
+      message: "Employer not found",
+    });
+  }
 
- await Employer.findByIdAndDelete(req.user.id);
+  /* 🔥 HANDLE LOGO */
+  let image = employer.image;
+  if (files?.logo) {
+    image = {
+      filename: files.logo[0].filename,
+      url: process.env.BASE_URL + "/" + files.logo[0].filename,
+    };
+  }
 
- res.status(200).json({
-    success:true,
-    message:"Employer Deleted"
- })
-})
+  /* 🔥 HANDLE COVER IMAGE */
+  let coverImage = employer.coverImage;
+  if (files?.coverImage) {
+    coverImage = {
+      filename: files.coverImage[0].filename,
+      url: process.env.BASE_URL + "/" + files.coverImage[0].filename,
+    };
+  }
+
+  /* 🔥 UPDATE */
+  let updated = await Employer.findByIdAndUpdate(
+    id,
+    {
+      name,
+      phoneNumber,
+      website,
+      category,
+      industryType,
+      foundedIn,
+      teamSize,
+      about,
+      address: {
+        country: address?.country,
+        state: address?.state,
+        city: address?.city,
+        area: address?.area,
+        fullAddress: address?.fullAddress,
+      },
+      image,
+      coverImage,
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated",
+    data: updated,
+  });
+});
+
+/* ================= GET PROFILE ================= */
+let getEmployerProfile = AsyncHandler(async (req, res) => {
+  let employer = await Employer.findById(req.user.id).select("-password");
+
+  if (!employer) {
+    return res.status(404).json({
+      success: false,
+      message: "Employer not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Profile fetched",
+    data: employer,
+  });
+});
+
+/* ================= DELETE ================= */
+let deleteEmployer = AsyncHandler(async (req, res) => {
+  let employer = await Employer.findById(req.user.id);
+
+  if (!employer) {
+    return res.status(404).json({
+      success: false,
+      message: "Employer not found",
+    });
+  }
+
+  await Employer.findByIdAndDelete(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    message: "Employer Deleted",
+  });
+});
 
 module.exports = {
   registerEmployer,
   loginEmployer,
   updateEmployerProfile,
   getEmployerProfile,
-  deleteEmployer
+  deleteEmployer,
 };

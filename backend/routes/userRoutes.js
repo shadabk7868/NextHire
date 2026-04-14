@@ -13,15 +13,16 @@ const {
 } = require("../controllers/userController");
 
 const { auth } = require("../middlewares/auth");
+const { upload } = require("../middlewares/upload");
 
 router.post("/register", register);
 router.post("/login", login);
 
 router.get("/getprofile", auth, getProfile);
 
-router.put("/update-personal-info", auth, updatePersonalInfo);
+router.put("/update-personal-info", auth, upload.single("profileImage"), updatePersonalInfo);
 
-router.put("/update-resume", auth, updateResume);
+router.put("/update-resume", auth,upload.single("resume"), updateResume);
 
 router.get("/all-users", auth, getUsers);
 
@@ -30,3 +31,4 @@ router.get("/user/:id", auth, getParticularUser);
 router.delete("/delete-user/:id", auth, deleteUser);
 
 module.exports = router;
+

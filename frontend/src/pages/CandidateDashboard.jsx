@@ -1,4 +1,7 @@
+import MyProfile from "./MyProfile";
+import MyResume from "./MyResume";
 import Navbar from "../components/Navbar";
+import { useState } from "react";
 import {
   FaHome,
   FaUser,
@@ -13,35 +16,80 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 
+
+function DashboardHome() {
+  return (
+    <>
+      <h1 className="text-3xl font-semibold text-gray-800">
+        Howdy, Jerome!!
+      </h1>
+      <p className="text-gray-500 mt-2 mb-8">
+        Ready to jump back in?
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm flex justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-blue-600">22</h2>
+            <p className="text-gray-500 text-sm mt-1">Applied Jobs</p>
+          </div>
+          <div className="bg-blue-100 p-4 rounded-xl text-blue-600 text-xl">
+            <FaBriefcase />
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm flex justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-red-500">93</h2>
+            <p className="text-gray-500 text-sm mt-1">Job Alerts</p>
+          </div>
+          <div className="bg-red-100 p-4 rounded-xl text-red-500 text-xl">
+            <FaFileAlt />
+          </div>
+        </div>
+
+      </div>
+    </>
+  );
+}
+
+
 export default function CandidateDashboard() {
+  const [activeTab, setActiveTab] = useState("dashboard");
+
+  const menuClass = (tab) =>
+    `flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer ${
+      activeTab === tab
+        ? "bg-blue-100 text-blue-600"
+        : "hover:text-blue-600"
+    }`;
+
   return (
     <div className="bg-[#f5f7fc] min-h-screen">
-
       <Navbar />
 
       <div className="flex">
 
-        {/* SIDEBAR */}
+   
         <div className="w-[300px] bg-white min-h-screen px-8 py-8">
 
           <div className="flex flex-col gap-3 text-m">
 
-            {/* ACTIVE */}
-            <div className="flex items-center gap-3 bg-blue-100 text-blue-600 px-4 py-3 rounded-lg cursor-pointer">
+            <div onClick={() => setActiveTab("dashboard")} className={menuClass("dashboard")}>
               <FaHome />
               <span>Dashboard</span>
             </div>
 
-            {/* MENU ITEMS */}
-            <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
+            <div onClick={() => setActiveTab("profile")} className={menuClass("profile")}>
               <FaUser />
               <span>My Profile</span>
             </div>
 
-            <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
-              <FaFileUpload />
-              <span>My Resume</span>
-            </div>
+            <div onClick={() => setActiveTab("resume")} className={menuClass("resume")}>
+           <FaFileUpload />
+           <span>My Resume</span>
+           </div>
 
             <div className="flex items-center gap-3 px-4 py-3 hover:text-blue-600 cursor-pointer">
               <FaClipboardList />
@@ -81,52 +129,16 @@ export default function CandidateDashboard() {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+
         <div className="flex-1 px-10 py-8">
 
-          {/* HEADING */}
-          <h1 className="text-3xl font-semibold text-gray-800">
-            Howdy, Jerome!!
-          </h1>
-          <p className="text-gray-500 mt-2 mb-8">
-            Ready to jump back in?
-          </p>
-
-          {/* CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            {/* POSTED JOBS */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between">
-              
-              <div>
-                <h2 className="text-3xl font-bold text-blue-600">22</h2>
-                <p className="text-gray-500 text-sm mt-1">Applied Jobs</p>
-              </div>
-
-              <div className="bg-blue-100 p-4 rounded-xl text-blue-600 text-xl">
-                <FaBriefcase />
-              </div>
-
-            </div>
-
-            {/* APPLICATIONS */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between">
-              
-              <div>
-                <h2 className="text-3xl font-bold text-red-500">930</h2>
-                <p className="text-gray-500 text-sm mt-1">Job Alerts</p>
-              </div>
-
-              <div className="bg-red-100 p-4 rounded-xl text-red-500 text-xl">
-                <FaFileAlt />
-              </div>
-
-            </div>
-
-          </div>
+          {activeTab === "dashboard" && <DashboardHome />}
+          {activeTab === "profile" && <MyProfile />}
+          {activeTab === "resume" && <MyResume />}
 
         </div>
+
       </div>
     </div>
   );
-}``
+}

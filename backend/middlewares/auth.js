@@ -1,6 +1,6 @@
 const { verifyToken } = require("../utils/generateToken");
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   let token = req.headers.authorization;
 
   if (!token) {
@@ -12,11 +12,18 @@ const auth = (req, res, next) => {
   }
 
   try {
-    let decoded = verifyToken(token);
+    let decoded = await verifyToken(token);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
     req.user = decoded;
+
     next();
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+
 module.exports = { auth };

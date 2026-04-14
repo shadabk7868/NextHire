@@ -14,7 +14,7 @@ export default function ProtectedRoute({ Comp }) {
         "http://localhost:4000/api/user/getprofile",
         {
           headers: {
-            Authorization: `Bearer ${token}` // ✅ FIXED
+            Authorization: `Bearer ${token}` 
           }
         }
       );
