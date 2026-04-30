@@ -16,3 +16,9 @@ git branch -M main
 git remote add origin https://github.com/shadabk7868/NextHire
 git push -u origin main
 # https://github.com/shadabk7868/jobportal
+git init
+git add README.md
+git commit -m "frontend"
+git branch -M main
+git remote add origin https://github.com/shadabk7868/Next-hire-frontend.git
+git push -u origin main
