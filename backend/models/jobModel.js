@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
- 
+
 let jobSchema = new mongoose.Schema({
     title: String,
     description: String,
@@ -10,8 +10,8 @@ let jobSchema = new mongoose.Schema({
     careerLevel: String,
     experience: Number,
     industryType: String,
-    Qualification: String,
-    deadlineData: Data,
+    qualification: String,
+    deadlineData: String,
     address: {
         country: String,
         state: String,
@@ -22,9 +22,17 @@ let jobSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "employers"
-    }
+    },
+    companyLogo: {
+        filename: String,
+        url: String
+    },
+    applicants: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+    }]
 }, { timestamps: true })
 let jobModel = mongoose.model("jobs", jobSchema);
- 
+
 module.exports = jobModel
- 
+

@@ -105,37 +105,37 @@ export default function CandidateDetails() {
 
           {/* RELATED JOBS */}
           <div className="space-y-5">
-  {jobs.slice(0, 3).map((item) => (
-    <Link key={item.id} to={`/company/${item.id}`} className="block">
-      
-      <div className="border rounded-2xl p-6 flex gap-4 bg-white hover:shadow-lg transition duration-300">
-        
-        <img
-          src={item.image}
-          className="w-14 h-14 rounded-xl object-cover"
-        />
+            {jobs.slice(0, 3).map((item) => (
+              <Link key={item.id} to={`/company/${item.id}`} className="block">
 
-        <div>
-          <h3 className="font-semibold">{item.title}</h3>
+                <div className="border rounded-2xl p-6 flex gap-4 bg-white hover:shadow-lg transition duration-300">
 
-          <div className="text-sm text-gray-500 flex gap-3 mt-2 flex-wrap">
-            <span>{item.company}</span>
-            <span>{item.location}</span>
-            <span>{item.salary}</span>
+                  <img
+                    src={item.image}
+                    className="w-14 h-14 rounded-xl object-cover"
+                  />
+
+                  <div>
+                    <h3 className="font-semibold">{item.title}</h3>
+
+                    <div className="text-sm text-gray-500 flex gap-3 mt-2 flex-wrap">
+                      <span>{item.company}</span>
+                      <span>{item.location}</span>
+                      <span>{item.salary}</span>
+                    </div>
+
+                    <div className="flex gap-2 mt-3 flex-wrap">
+                      <span className="bg-blue-100 px-3 py-1 text-xs rounded-full">{item.type}</span>
+                      <span className="bg-green-100 px-3 py-1 text-xs rounded-full">{item.level}</span>
+                      <span className="bg-yellow-100 px-3 py-1 text-xs rounded-full">{item.urgency}</span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </Link>
+            ))}
           </div>
-
-          <div className="flex gap-2 mt-3 flex-wrap">
-            <span className="bg-blue-100 px-3 py-1 text-xs rounded-full">{item.type}</span>
-            <span className="bg-green-100 px-3 py-1 text-xs rounded-full">{item.level}</span>
-            <span className="bg-yellow-100 px-3 py-1 text-xs rounded-full">{item.urgency}</span>
-          </div>
-
-        </div>
-      </div>
-
-    </Link>
-  ))}
-</div>
         </div>
 
         {/* RIGHT SIDEBAR */}

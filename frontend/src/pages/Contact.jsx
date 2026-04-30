@@ -15,55 +15,55 @@ export default function Contact() {
       </div>
 
 
-{/* CONTACT INFO CARDS */}
-<div className="lg:px-[130px] md:px-10 px-6 py-10">
-  <div className="grid md:grid-cols-3 gap-6">
+      {/* CONTACT INFO CARDS */}
+      <div className="lg:px-[90px] md:px-10 px-6 py-10">
+        <div className="grid md:grid-cols-3 gap-6">
 
-    {/* ADDRESS */}
-    <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
-      <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
-        <FaMapMarkerAlt />
-      </div>
-      <div>
-        <h4 className="font-semibold">Address</h4>
-        <p className="text-sm text-gray-500 mt-1">
-          329 Queensberry Street, North <br />
-          Melbourne VIC 3051, Australia.
-        </p>
-      </div>
-    </div>
+          {/* ADDRESS */}
+          <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
+            <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
+              <FaMapMarkerAlt />
+            </div>
+            <div>
+              <h4 className="font-semibold">Address</h4>
+              <p className="text-sm text-gray-500 mt-1">
+                329 Queensberry Street, North <br />
+                Melbourne VIC 3051, Australia.
+              </p>
+            </div>
+          </div>
 
-    {/* PHONE */}
-    <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
-      <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
-        <FaPhoneAlt />
-      </div>
-      <div>
-        <h4 className="font-semibold">Call Us</h4>
-        <p className="text-sm text-gray-500 mt-1">
-          123 456 7890
-        </p>
-      </div>
-    </div>
+          {/* PHONE */}
+          <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
+            <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
+              <FaPhoneAlt />
+            </div>
+            <div>
+              <h4 className="font-semibold">Call Us</h4>
+              <p className="text-sm text-gray-500 mt-1">
+                123 456 7890
+              </p>
+            </div>
+          </div>
 
-    {/* EMAIL */}
-    <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
-      <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
-        <FaEnvelope />
-      </div>
-      <div>
-        <h4 className="font-semibold">Email</h4>
-        <p className="text-sm text-gray-500 mt-1">
-          contact.london@example.com
-        </p>
-      </div>
-    </div>
+          {/* EMAIL */}
+          <div className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-start">
+            <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
+              <FaEnvelope />
+            </div>
+            <div>
+              <h4 className="font-semibold">Email</h4>
+              <p className="text-sm text-gray-500 mt-1">
+                contact.london@example.com
+              </p>
+            </div>
+          </div>
 
-  </div>
-</div>
+        </div>
+      </div>
 
       {/* FORM SECTION */}
-      <div className="lg:px-[130px] md:px-10 px-6 py-12 flex justify-center">
+      <div className="lg:px-[90px] md:px-10 px-6 py-12 flex justify-center">
 
         <div className="w-full max-w-4xl bg-white p-8 rounded-xl shadow-sm">
 

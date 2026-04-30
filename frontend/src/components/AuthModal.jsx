@@ -12,18 +12,29 @@ export default function AuthModal({ onClose }) {
 
   const handleSubmit = async () => {
     try {
-      let url = isLogin
-        ? "http://localhost:4000/api/user/login"
-        : "http://localhost:4000/api/user/register";
+      let url;
 
+      // 🔥 ROLE BASED API
+      if (isLogin) {
+        url =
+          role === "employer"
+            ? "https://nexthire-i1hx.onrender.com/api/employer/login"
+            : "https://nexthire-i1hx.onrender.com/api/user/login";
+      } else {
+        url =
+          role === "employer"
+            ? "https://nexthire-i1hx.onrender.com/api/employer/register"
+            : "https://nexthire-i1hx.onrender.com/api/user/register";
+      }
+
+      // 🔥 PAYLOAD
       let payload = isLogin
         ? { email, password }
-        : { name, email, password, role };
+        : { name, email, password };
 
       const { data } = await axios.post(url, payload);
 
       if (data.success) {
-
         if (!isLogin) {
           alert("Registered successfully, please login");
           setIsLogin(true);
@@ -32,12 +43,13 @@ export default function AuthModal({ onClose }) {
         }
 
         localStorage.setItem("token", data.token);
+localStorage.setItem("role", role);
         onClose();
 
-        if (data.data.role === "candidate") {
-          window.location.href = "/candidate-dashboard";
-        } else {
+        if (role === "employer") {
           window.location.href = "/employers-dashboard";
+        } else {
+          window.location.href = "/candidate-dashboard";
         }
       }
     } catch (error) {
@@ -46,10 +58,11 @@ export default function AuthModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
 
       <div className="bg-white w-[400px] rounded-xl p-6 relative shadow-xl">
 
+        {/* CLOSE */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400"
@@ -57,36 +70,37 @@ export default function AuthModal({ onClose }) {
           <FaTimes />
         </button>
 
+        {/* TITLE */}
         <h2 className="text-xl font-semibold text-center mb-6">
-          {isLogin ? "Login to Superio" : "Create a Free Superio Account"}
+          {isLogin ? "Login to Superio" : "Create a Free Account"}
         </h2>
 
-        {!isLogin && (
-          <div className="flex gap-3 mb-5">
-            <button
-              onClick={() => setRole("candidate")}
-              className={`flex-1 py-2 rounded-lg ${
-                role === "candidate"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100"
-              }`}
-            >
-              Candidate
-            </button>
+        {/* ROLE SWITCH */}
+        <div className="flex gap-3 mb-5">
+          <button
+            onClick={() => setRole("candidate")}
+            className={`flex-1 py-2 rounded-lg ${
+              role === "candidate"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100"
+            }`}
+          >
+            Candidate
+          </button>
 
-            <button
-              onClick={() => setRole("employer")}
-              className={`flex-1 py-2 rounded-lg ${
-                role === "employer"
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-100"
-              }`}
-            >
-              Employer
-            </button>
-          </div>
-        )}
+          <button
+            onClick={() => setRole("employer")}
+            className={`flex-1 py-2 rounded-lg ${
+              role === "employer"
+                ? "bg-green-600 text-white"
+                : "bg-gray-100"
+            }`}
+          >
+            Employer
+          </button>
+        </div>
 
+        {/* FORM */}
         <div className="space-y-4">
 
           {!isLogin && (
@@ -94,6 +108,7 @@ export default function AuthModal({ onClose }) {
               type="text"
               placeholder="Username"
               className="w-full bg-gray-100 p-3 rounded-lg"
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
           )}
@@ -102,6 +117,7 @@ export default function AuthModal({ onClose }) {
             type="email"
             placeholder="Email"
             className="w-full bg-gray-100 p-3 rounded-lg"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
@@ -109,17 +125,19 @@ export default function AuthModal({ onClose }) {
             type="password"
             placeholder="Password"
             className="w-full bg-gray-100 p-3 rounded-lg"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
           >
             {isLogin ? "Log In" : "Register"}
           </button>
         </div>
 
+        {/* SWITCH LOGIN/REGISTER */}
         <p className="text-center text-sm text-gray-500 mt-4">
           {isLogin ? "Don’t have an account?" : "Already have an account?"}
           <span

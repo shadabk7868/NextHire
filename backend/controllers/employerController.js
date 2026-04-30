@@ -29,9 +29,8 @@ let registerEmployer = AsyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
-    phoneNumber,
-    industryType,
   });
+  await employer.save()
 
   res.status(201).json({
     success: true,
@@ -68,13 +67,19 @@ let loginEmployer = AsyncHandler(async (req, res) => {
     });
   }
 
-  let token = await genrateToken({ id: employer._id }, "1h");
+  let token = await genrateToken(
+  { id: employer._id, role: employer.role },
+  "1h"
+);
 
   res.status(200).json({
-    success: true,
-    message: "Login successful",
-    token,
-  });
+  success: true,
+  message: "Login successful",
+  token,
+  data: {
+    role: employer.role
+  }
+});
 });
 
 /* ================= UPDATE PROFILE ================= */
@@ -82,8 +87,6 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
   let id = req.user.id;
 
   let {
-    name,
-    phoneNumber,
     website,
     category,
     industryType,
@@ -124,8 +127,6 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
   let updated = await Employer.findByIdAndUpdate(
     id,
     {
-      name,
-      phoneNumber,
       website,
       category,
       industryType,
@@ -133,17 +134,19 @@ let updateEmployerProfile = AsyncHandler(async (req, res) => {
       teamSize,
       about,
       address: {
-        country: address?.country,
-        state: address?.state,
-        city: address?.city,
-        area: address?.area,
-        fullAddress: address?.fullAddress,
-      },
+  country: req.body["address[country]"] || employer.address?.country,
+  state: req.body["address[state]"] || employer.address?.state,
+  city: req.body["address[city]"] || employer.address?.city,
+  area: req.body["address[area]"] || employer.address?.area,
+  fullAddress:
+    req.body["address[fullAddress]"] || employer.address?.fullAddress,
+},
       image,
       coverImage,
     },
     { new: true }
   );
+  
 
   res.status(200).json({
     success: true,

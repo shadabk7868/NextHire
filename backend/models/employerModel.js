@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
- 
+
 let employerSchema = new mongoose.Schema({
     name: String,
     image: { filename: String, url: String },
     coverImage: { filename: String, url: String },
     email: { type: String, required: true, unique: true },
-    password:{type:String,required:true},
+    password: { type: String, required: true },
     phoneNumber: Number,
     category: String,
     website: String,
@@ -13,6 +13,7 @@ let employerSchema = new mongoose.Schema({
     foundedIn: Date,
     teamSize: Number,
     about: String,
+    role: { type: String, default: "employer" },
     address: {
         country: String,
         state: String,
@@ -45,5 +46,5 @@ let employerSchema = new mongoose.Schema({
     ]
 }, { timestamps: true })
 let employerModel = mongoose.model("employers", employerSchema);
- 
+
 module.exports = employerModel

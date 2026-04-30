@@ -1,9 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function MyResume() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState(null); 
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(
+  "https://nexthire-i1hx.onrender.com/api/user/getprofile",
+  {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  }
+);
+        console.log(res.data.data);
+
+        const url = res.data.data?.resume?.url;
+        if (url) {
+          setResumeUrl(url);
+        }
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleUpload = async () => {
     if (!file) {
@@ -15,25 +42,30 @@ export default function MyResume() {
       setLoading(true);
 
       const formData = new FormData();
-      formData.append("resume", file); 
+      formData.append("resume", file);
 
       const res = await axios.put(
-        "/api/user/update-resume",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
-      );
+  "https://nexthire-i1hx.onrender.com/api/user/update-resume",
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "multipart/form-data"
+    }
+  }
+);
 
       alert(res.data.message);
+
+      setResumeUrl(res.data?.data?.resume?.url || null);
+
     } catch (error) {
       console.log(error);
       alert("Upload failed");
     } finally {
       setLoading(false);
     }
+    setFile(null);
   };
 
   return (
@@ -83,16 +115,32 @@ export default function MyResume() {
           </p>
         )}
 
-        {/* BUTTON */}
-        <button
-          onClick={handleUpload}
-          disabled={loading}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-        >
-          {loading ? "Uploading..." : "Upload Resume"}
-        </button>
+        {/* BUTTONS */}
+        <div className="flex gap-4 flex-wrap">
+
+          <button
+            onClick={handleUpload}
+            disabled={loading}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+          >
+            {loading ? "Uploading..." : "Upload Resume"}
+          </button>
+
+          {/* VIEW BUTTON */}
+          {resumeUrl && (
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
+            >
+              View Resume
+            </a>
+          )}
+
+        </div>
 
       </div>
     </>
   );
-}   
+}

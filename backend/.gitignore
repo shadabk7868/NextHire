@@ -13,6 +13,6 @@ node_modules
 git add .
 git commit -m "second msg"
 git branch -M main
-git remote add origin https://github.com/shadabk7868/main-jobportal
+git remote add origin https://github.com/shadabk7868/NextHire
 git push -u origin main
 # https://github.com/shadabk7868/jobportal

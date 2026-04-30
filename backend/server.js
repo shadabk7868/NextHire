@@ -15,9 +15,15 @@ connectDB();
 
 
 const userRoute = require("./routes/userRoutes");
+const employerRoute = require("./routes/employerRoutes.js");
+const jobRoute = require("./routes/jobRoutes.js");
+const contactRoute = require("./routes/contactRoutes.js")
 
 app.use("/api/user", userRoute);
-app.use("/uploads", express.static("uploads"));
+app.use("/api/employer", employerRoute);
+app.use("/api/job", jobRoute);
+app.use("/api/contact", contactRoute);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.listen(process.env.PORT, (err) => {
   console.log(err || "Server Run on Port "+ process.env.PORT);
 })

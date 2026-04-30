@@ -5,17 +5,17 @@ let userSchema = new mongoose.Schema({
     name: String,
     jobTitle: String,
     phoneNumber: Number,
-   password: {
-  type: String,
-  required: true
-},
+    password: {
+        type: String,
+        required: true
+    },
     email: { type: String, unique: true, required: true },
     experience: Number,
     age: Number,
     educationLevel: String,
-    gender:String,
-    currentSalary:Number,
-    expectedSalary:Number,
+    gender: String,
+    currentSalary: Number,
+    expectedSalary: Number,
     education: [
         {
             instituteName: String,
@@ -38,14 +38,23 @@ let userSchema = new mongoose.Schema({
         }
     ],
     languages: [],
-    role: String,
+    role: { type: String, default: "candidate" },
     address: { country: String, state: String, dist: String, area: String, fullAddress: String },
     resume: { filename: String, url: String },
     keywords: [],
-    appliedJobs: [{
-        appliedJobId: { type: mongoose.Schema.Types.ObjectId, ref: "jobs", },
-        _id: false
-    }],
+    appliedJobs: [
+        {
+            appliedJobId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "jobs",
+            },
+            appliedAt: {
+                type: Date,
+                default: Date.now,
+            },
+            _id: false,
+        },
+    ],
     shortlisted: [{
         shortlistedJobId: { type: mongoose.Schema.Types.ObjectId, ref: "jobs", },
         _id: false

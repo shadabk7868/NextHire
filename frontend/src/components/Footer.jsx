@@ -55,7 +55,7 @@ export default function Footer() {
       </div>
 
       {/* BOTTOM */}
-      <div className="mt-26 border-t">
+      <div className="mt-26 ">
         <div className="lg:px-[130px] px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           
           <p>© 2026 Job Portal. All Right Reserved.</p>

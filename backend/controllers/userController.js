@@ -64,16 +64,22 @@ let login = AsyncHandler(async (req, res) => {
     });
   }
  
-  let token = await genrateToken({ id: user._id }, "1h");
+  let token = await genrateToken(
+  { id: user._id, role: user.role },
+  "1h"
+);
  
   let userData = user.toObject();
   delete userData.password;
  
   res.status(200).json({
-    success: true,
-    message: "Login successful",
-    token
-  });
+  success: true,
+  message: "Login successful",
+  token,
+  data: {
+    role: user.role
+  }
+});
 });
  
  
@@ -165,9 +171,10 @@ let updateResume = AsyncHandler(async (req, res) => {
   );
  
   res.status(200).json({
-    success: true,
-    message: "Resume updated",
-  });
+  success: true,
+  message: "Resume updated",
+  data: updated  
+});
 });
  
 // GET ALL USERS
@@ -238,6 +245,25 @@ let getProfile = AsyncHandler(async (req, res) => {
     data: user
   });
 });
+
+let getAppliedJobs = AsyncHandler(async (req, res) => {
+  let user = await User.findById(req.user.id)
+    .populate("appliedJobs.appliedJobId"); 
+
+  
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    data: user.appliedJobs
+  });
+});
  
 module.exports = {
   register,
@@ -247,5 +273,6 @@ module.exports = {
   getUsers,
   getParticularUser,
   deleteUser,
-  getProfile
+  getProfile,
+  getAppliedJobs
 };

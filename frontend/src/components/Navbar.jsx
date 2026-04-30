@@ -1,153 +1,161 @@
-import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
 import AuthModal from "./AuthModal";
 
 export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState(null);
   const [showAuth, setShowAuth] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false); // 🔥 mobile menu
 
-  const menuItems = [
-    { name: "Home", path: "/", sub: ["Home 1", "Home 2"] },
-    { name: "Find Jobs", path: "/jobs", sub: ["All Jobs", "Job Categories", "Job Alerts"] },
-    { name: "Employers", path: "/company", sub: ["Browse Employers", "Employer Dashboard"] },
-    { name: "Candidates", path: "/candidate", sub: ["Browse Candidates", "Candidate Dashboard"] },
-    { name: "Blog", path: "/blog", sub: [] },
-    { name: "Contact", path: "/contact", sub: [] },
-  ];
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userRole = localStorage.getItem("role");
+
+    setIsLoggedIn(!!token);
+    setRole(userRole);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/";
+  };
 
   return (
     <>
-      <header className="bg-white sticky top-0 z-50">
-        <div className="lg:px-[130px] px-6 flex justify-between items-center h-[80px]">
+      <header className="bg-white sticky top-0 z-50 shadow-sm">
+        <div className="px-4 sm:px-6 lg:px-[80px] flex justify-between items-center h-[70px]">
 
           {/* LOGO */}
           <Link to="/">
-            <img src="/logos.svg" alt="logo" className="h-10" />
+            <img src="/logos.svg" alt="logo" className="h-10 md:h-12" />
           </Link>
 
           {/* DESKTOP MENU */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-700 relative">
-            {menuItems.map((item, idx) => (
-              <div
-                key={idx}
-                className="relative"
-                onMouseEnter={() => setOpenMenu(idx)}
-              >
-                <Link
-                  to={item.path || "#"}
-                  className="flex items-center gap-1 hover:text-blue-600 transition"
-                >
-                  {item.name}
-                  {item.sub.length > 0 && <FaChevronDown className="text-xs" />}
-                </Link>
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-700">
 
-                {/* DROPDOWN */}
-                {item.sub.length > 0 && openMenu === idx && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50"
-                    onMouseLeave={() => setOpenMenu(null)}>
+            <Link to="/">Home</Link>
+            <Link to="/jobs">Find Jobs</Link>
+            <Link to="/blog">Blog</Link>
+            <Link to="/contact">Contact</Link>
 
-                    {item.sub.map((subItem, i) => {
-                      let linkPath = "#";
+            {/* DASHBOARD */}
+            {isLoggedIn && role === "candidate" && (
+              <Link to="/candidate-dashboard" className="text-blue-600 font-semibold">
+                Dashboard
+              </Link>
+            )}
 
-                      if (subItem === "Employer Dashboard") {
-                        linkPath = "/employers-dashboard";
-                      } else if (subItem === "Candidate Dashboard") {
-                        linkPath = "/candidate-dashboard";
-                      }
-
-                      return (
-                        <Link
-                          key={i}
-                          to={linkPath}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                        >
-                          {subItem}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ))}
+            {isLoggedIn && role === "employer" && (
+              <Link to="/employers-dashboard" className="text-blue-600 font-semibold">
+                Dashboard
+              </Link>
+            )}
           </nav>
 
-          {/* RIGHT BUTTONS */}
+          {/* RIGHT DESKTOP */}
           <div className="hidden lg:flex items-center gap-4">
-            <button
-              onClick={() => setShowAuth(true)}
-              className="text-sm text-gray-700 hover:text-blue-600 transition"
-            >
-              Login / Register
-            </button>
 
-            <button className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
-              Job Post
-            </button>
+            {!isLoggedIn ? (
+              <button
+                onClick={() => setShowAuth(true)}
+                className="text-sm text-gray-700 hover:text-blue-600"
+              >
+                Login / Register
+              </button>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="text-sm text-red-500"
+              >
+                Logout
+              </button>
+            )}
+
+            {/* EMPLOYER */}
+            {isLoggedIn && role === "employer" && (
+              <Link to="/employers-dashboard">
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                  Post Job
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* MOBILE MENU BUTTON */}
-          <div className="lg:hidden">
-            <button
-              onClick={() =>
-                setOpenMenu(openMenu === "mobile" ? null : "mobile")
-              }
-              className="text-2xl"
-            >
-              ☰
-            </button>
-          </div>
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="lg:hidden text-xl"
+          >
+            <FaBars />
+          </button>
         </div>
 
-        {/* MOBILE MENU */}
-        {openMenu === "mobile" && (
-          <div className="lg:hidden px-6 pb-4 space-y-3 text-sm text-gray-700">
-            {menuItems.map((item, idx) => (
-              <div key={idx}>
-                <div className="flex justify-between items-center py-1">
-                  <Link to={item.path || "#"}>{item.name}</Link>
+        {/* 🔥 MOBILE MENU */}
+        {menuOpen && (
+          <div className="fixed inset-0 bg-black/40 z-50">
+            <div className="bg-white w-[260px] h-full p-6 shadow-lg">
 
-                  {item.sub.length > 0 && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenMenu((prev) =>
-                          prev === idx + "sub" ? "mobile" : idx + "sub"
-                        );
-                      }}
-                    >
-                      <FaChevronDown className="text-xs" />
-                    </button>
-                  )}
-                </div>
-
-                {openMenu === idx + "sub" && item.sub.length > 0 && (
-                  <div className="pl-4 space-y-1">
-                    {item.sub.map((subItem, i) => (
-                      <a
-                        key={i}
-                        href="#"
-                        className="block py-1 text-gray-500 hover:text-blue-600"
-                      >
-                        {subItem}
-                      </a>
-                    ))}
-                  </div>
-                )}
+              {/* CLOSE */}
+              <div className="flex justify-end mb-6">
+                <button onClick={() => setMenuOpen(false)}>
+                  <FaTimes size={20} />
+                </button>
               </div>
-            ))}
 
-            {/* MOBILE BUTTONS */}
-            <button
-              onClick={() => setShowAuth(true)}
-              className="w-full text-left py-2"
-            >
-              Login / Register
-            </button>
+              {/* MENU ITEMS */}
+              <nav className="flex flex-col gap-5 text-gray-700 font-medium">
 
-            <button className="w-full bg-blue-600 text-white py-2 rounded">
-              Post a Job
-            </button>
+                <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+                <Link to="/jobs" onClick={() => setMenuOpen(false)}>Find Jobs</Link>
+                <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
+                <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+
+                {/* DASHBOARD */}
+                {isLoggedIn && role === "candidate" && (
+                  <Link to="/candidate-dashboard" onClick={() => setMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                )}
+
+                {isLoggedIn && role === "employer" && (
+                  <Link to="/employers-dashboard" onClick={() => setMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                )}
+
+                {/* LOGIN / LOGOUT */}
+                {!isLoggedIn ? (
+                  <button
+                    onClick={() => {
+                      setShowAuth(true);
+                      setMenuOpen(false);
+                    }}
+                    className="text-left"
+                  >
+                    Login / Register
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="text-left text-red-500"
+                  >
+                    Logout
+                  </button>
+                )}
+
+                {/* EMPLOYER BUTTON */}
+                {isLoggedIn && role === "employer" && (
+                  <Link to="/employers-dashboard" onClick={() => setMenuOpen(false)}>
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm w-full">
+                      Post Job
+                    </button>
+                  </Link>
+                )}
+              </nav>
+            </div>
           </div>
         )}
       </header>
