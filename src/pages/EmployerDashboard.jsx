@@ -5,11 +5,11 @@ import {
   FaPlusCircle,
   FaSignOutAlt,
   FaBriefcase,
-  FaFileAlt,
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import CompanyProfile from "../pages/CompanyProfile";
 import PostJob from "../pages/PostJob";
+import { useNavigate } from "react-router-dom";
 
 function DashboardHome() {
   const [stats, setStats] = useState({
@@ -21,6 +21,7 @@ function DashboardHome() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) return;
 
         const res = await axios.get(
           "https://nexthire-i1hx.onrender.com/api/job/getjob",
@@ -31,7 +32,9 @@ function DashboardHome() {
 
         const jobs = res.data?.data || [];
 
-        const activeJobs = jobs.filter((job) => job.status !== "closed").length;
+        const activeJobs = jobs.filter(
+          (job) => job.status !== "closed"
+        ).length;
 
         setStats({
           postedJobs: jobs.length,
@@ -90,18 +93,30 @@ function DashboardHome() {
     </>
   );
 }
+
 export default function EmployerDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, []);
 
   const menuClass = (tab) =>
-    `flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer ${activeTab === tab
-      ? "bg-blue-100 text-blue-600"
-      : "hover:text-blue-600"
+    `flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer ${
+      activeTab === tab
+        ? "bg-blue-100 text-blue-600"
+        : "hover:text-blue-600"
     }`;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/";
+    localStorage.removeItem("role");
+    sessionStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -109,21 +124,31 @@ export default function EmployerDashboard() {
       <Navbar />
 
       <div className="flex">
+
         {/* SIDEBAR */}
         <div className="w-[300px] bg-white min-h-screen px-8 py-8">
           <div className="flex flex-col gap-3 text-m">
 
-            <div onClick={() => setActiveTab("dashboard")} className={menuClass("dashboard")}>
+            <div
+              onClick={() => setActiveTab("dashboard")}
+              className={menuClass("dashboard")}
+            >
               <FaHome />
               <span>Dashboard</span>
             </div>
 
-            <div onClick={() => setActiveTab("post")} className={menuClass("post")}>
+            <div
+              onClick={() => setActiveTab("post")}
+              className={menuClass("post")}
+            >
               <FaPlusCircle />
               <span>Post A New Job</span>
             </div>
 
-            <div onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 hover:text-red-500 cursor-pointer">
+            <div
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-4 py-3 hover:text-red-500 cursor-pointer"
+            >
               <FaSignOutAlt />
               <span>Logout</span>
             </div>
@@ -137,6 +162,7 @@ export default function EmployerDashboard() {
           {activeTab === "post" && <PostJob />}
           {activeTab === "profile" && <CompanyProfile />}
         </div>
+
       </div>
     </div>
   );
