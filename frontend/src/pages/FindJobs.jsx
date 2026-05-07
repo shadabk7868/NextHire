@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
-import API from "../../../backend/utils/api";
+import API from "../utils/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 

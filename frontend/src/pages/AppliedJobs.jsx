@@ -29,6 +29,7 @@ export default function AppliedJobs() {
       setJobs(res.data.data || []);
     } catch (err) {
       console.log(err);
+      
       alert("Error fetching applied jobs");
     } finally {
       setLoading(false);

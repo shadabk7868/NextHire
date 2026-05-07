@@ -1,5 +1,5 @@
 import { useState } from "react";
-import API from "../../../backend/utils/api";
+import API from "../utils/api";
 
 export default function Postjob() {
   const [form, setForm] = useState({
@@ -20,7 +20,6 @@ export default function Postjob() {
     fullAddress: "",
   });
 
-  // ✅ NEW (logo state)
   const [logo, setLogo] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +32,6 @@ export default function Postjob() {
     try {
       setLoading(true);
 
-      // ✅ NEW (FormData for file upload)
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -54,7 +52,6 @@ export default function Postjob() {
       formData.append("address[country]", form.country);
       formData.append("address[fullAddress]", form.fullAddress);
 
-      // ✅ NEW (logo attach)
       if (logo) {
         formData.append("companyLogo", logo);
       }
@@ -107,7 +104,7 @@ export default function Postjob() {
 
       <div className="bg-white p-8 rounded-2xl shadow-sm space-y-5">
 
-        {/* ✅ NEW (LOGO UPLOAD FIELD) */}
+        {/*  */}
         <div>
           <label className="text-sm text-gray-600">Company Logo</label>
           <input

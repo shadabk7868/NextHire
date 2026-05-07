@@ -24,7 +24,7 @@ export default function MyProfile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("https://nexthire-i1hx.onrender.com/api/user/getprofile", {
+        const res = await axios.get("http://localhost:4000/api/user/getprofile", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
@@ -83,7 +83,7 @@ export default function MyProfile() {
       }
 
       const res = await axios.put(
-        "https://nexthire-i1hx.onrender.com/api/user/update-personal-info",
+        "http://localhost:4000/api/user/update-personal-info",
         formData,
         {
           headers: {
@@ -112,81 +112,81 @@ export default function MyProfile() {
 
       <div className="bg-white p-8 rounded-2xl shadow-sm mt-6">
 
-        {/* 🔥 VIEW MODE */}
-{!isEdit ? (
-  <>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      {/* PERSONAL INFO */}
-      <div className="bg-[#f5f7fc] p-6 rounded-xl">
-        <h3 className="font-semibold text-lg mb-4">Personal Info</h3>
+        {!isEdit ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <div className="space-y-2 text-m">
-          <p><span className="text-gray-500 ">Name:</span> {form.name}</p>
-          <p><span className="text-gray-500">Phone:</span> {form.phoneNumber}</p>
-          <p><span className="text-gray-500">Email:</span> {form.email}</p>
-          <p><span className="text-gray-500">Age:</span> {form.age}</p>
-        </div>
-      </div>
+              {/* PERSONAL INFO */}
+              <div className="bg-[#f5f7fc] p-6 rounded-xl">
+                <h3 className="font-semibold text-lg mb-4">Personal Info</h3>
 
-      {/* PROFESSIONAL INFO */}
-      <div className="bg-[#f5f7fc] p-6 rounded-xl">
-        <h3 className="font-semibold text-lg mb-4">Professional Info</h3>
+                <div className="space-y-2 text-m">
+                  <p><span className="text-gray-500 ">Name:</span> {form.name}</p>
+                  <p><span className="text-gray-500">Phone:</span> {form.phoneNumber}</p>
+                  <p><span className="text-gray-500">Email:</span> {form.email}</p>
+                  <p><span className="text-gray-500">Age:</span> {form.age}</p>
+                </div>
+              </div>
 
-        <div className="space-y-2 text-m">
-          <p><span className="text-gray-500">Job Title:</span> {form.jobTitle}</p>
-          <p><span className="text-gray-500">Experience:</span> {form.experience}</p>
-          <p><span className="text-gray-500">Education:</span> {form.educationLevel}</p>
-        </div>
-      </div>
+              {/* PROFESSIONAL INFO */}
+              <div className="bg-[#f5f7fc] p-6 rounded-xl">
+                <h3 className="font-semibold text-lg mb-4">Professional Info</h3>
 
-      {/* SALARY INFO */}
-      <div className="bg-[#f5f7fc] p-6 rounded-xl">
-        <h3 className="font-semibold text-lg mb-4">Salary Info</h3>
+                <div className="space-y-2 text-m">
+                  <p><span className="text-gray-500">Job Title:</span> {form.jobTitle}</p>
+                  <p><span className="text-gray-500">Experience:</span> {form.experience}</p>
+                  <p><span className="text-gray-500">Education:</span> {form.educationLevel}</p>
+                </div>
+              </div>
 
-        <div className="space-y-2 text-m">
-          <p><span className="text-gray-500">Current Salary:</span> {form.currentSalary}</p>
-          <p><span className="text-gray-500">Expected Salary:</span> {form.expectedSalary}</p>
-        </div>
-      </div>
+              {/* SALARY INFO */}
+              <div className="bg-[#f5f7fc] p-6 rounded-xl">
+                <h3 className="font-semibold text-lg mb-4">Salary Info</h3>
 
-      {/* LANGUAGES */}
-      <div className="bg-[#f5f7fc] p-6 rounded-xl">
-        <h3 className="font-semibold text-lg mb-4">Languages</h3>
+                <div className="space-y-2 text-m">
+                  <p><span className="text-gray-500">Current Salary:</span> {form.currentSalary}</p>
+                  <p><span className="text-gray-500">Expected Salary:</span> {form.expectedSalary}</p>
+                </div>
+              </div>
 
-        <div className="flex flex-wrap gap-2">
-          {form.languages.split(",").map((lang, i) => (
-            <span
-              key={i}
-              className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs"
+              {/* LANGUAGES */}
+              <div className="bg-[#f5f7fc] p-6 rounded-xl">
+                <h3 className="font-semibold text-lg mb-4">Languages</h3>
+
+                <div className="flex flex-wrap gap-2">
+                  {form.languages.split(",").map((lang, i) => (
+                    <span
+                      key={i}
+                      className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs"
+                    >
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* DESCRIPTION */}
+            <div className="bg-[#f5f7fc] p-6 rounded-xl mt-6">
+              <h3 className="font-semibold text-lg mb-4">About Me</h3>
+              <p className="text-m text-gray-600 leading-relaxed">
+                {form.description || "No description added"}
+              </p>
+            </div>
+
+            {/* BUTTON */}
+            <button
+              onClick={() => setIsEdit(true)}
+              className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
             >
-              {lang}
-            </span>
-          ))}
-        </div>
-      </div>
+              Edit Profile
+            </button>
+          </>
+        ) : (
 
-    </div>
 
-    {/* DESCRIPTION */}
-    <div className="bg-[#f5f7fc] p-6 rounded-xl mt-6">
-      <h3 className="font-semibold text-lg mb-4">About Me</h3>
-      <p className="text-m text-gray-600 leading-relaxed">
-        {form.description || "No description added"}
-      </p>
-    </div>
-
-    {/* BUTTON */}
-    <button
-      onClick={() => setIsEdit(true)}
-      className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-    >
-      Edit Profile
-    </button>
-  </>
-) : (
-
-          /* 🔥 FORM MODE (same UI as before) */
           <>
             <div className="flex items-center gap-6 mb-8">
               <div className="w-[200px] h-[120px] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer">

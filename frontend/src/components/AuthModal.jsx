@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
 export default function AuthModal({ onClose }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,11 +11,12 @@ export default function AuthModal({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
     try {
       let url;
 
-      // 🔥 ROLE BASED API
       if (isLogin) {
         url =
           role === "employer"
@@ -27,7 +29,6 @@ export default function AuthModal({ onClose }) {
             : "https://nexthire-i1hx.onrender.com/api/user/register";
       }
 
-      // 🔥 PAYLOAD
       let payload = isLogin
         ? { email, password }
         : { name, email, password };
@@ -43,14 +44,17 @@ export default function AuthModal({ onClose }) {
         }
 
         localStorage.setItem("token", data.token);
-localStorage.setItem("role", role);
+        localStorage.setItem("role", role);
+
         onClose();
 
-        if (role === "employer") {
-          window.location.href = "/employers-dashboard";
-        } else {
-          window.location.href = "/candidate-dashboard";
-        }
+        setTimeout(() => {
+          if (role === "employer") {
+            navigate("/employers-dashboard");
+          } else {
+            navigate("/candidate-dashboard");
+          }
+        }, 300);
       }
     } catch (error) {
       alert(error?.response?.data?.message || "Something went wrong");
