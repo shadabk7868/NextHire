@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
 export default function AuthModal({ onClose }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,6 +10,8 @@ export default function AuthModal({ onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -41,15 +44,16 @@ export default function AuthModal({ onClose }) {
         }
 
         localStorage.setItem("token", data.token);
-        localStorage.setItem("role", role);
+localStorage.setItem("role", role);
+localStorage.setItem("userId", data?.data?.id || data?.data?._id);
 
         onClose();
 
         setTimeout(() => {
           if (role === "employer") {
-            window.location.href = "/employers-dashboard";
+            navigate("/employers-dashboard");
           } else {
-            window.location.href = "/candidate-dashboard";
+            navigate("/candidate-dashboard");
           }
         }, 300);
       }
@@ -80,20 +84,22 @@ export default function AuthModal({ onClose }) {
         <div className="flex gap-3 mb-5">
           <button
             onClick={() => setRole("candidate")}
-            className={`flex-1 py-2 rounded-lg ${role === "candidate"
+            className={`flex-1 py-2 rounded-lg ${
+              role === "candidate"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-100"
-              }`}
+            }`}
           >
             Candidate
           </button>
 
           <button
             onClick={() => setRole("employer")}
-            className={`flex-1 py-2 rounded-lg ${role === "employer"
+            className={`flex-1 py-2 rounded-lg ${
+              role === "employer"
                 ? "bg-green-600 text-white"
                 : "bg-gray-100"
-              }`}
+            }`}
           >
             Employer
           </button>

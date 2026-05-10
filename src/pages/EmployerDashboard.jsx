@@ -9,6 +9,7 @@ import {
 import Navbar from "../components/Navbar";
 import CompanyProfile from "../pages/CompanyProfile";
 import PostJob from "../pages/PostJob";
+import MyJobs from "./Myjobs";
 import { useNavigate } from "react-router-dom";
 
 function DashboardHome() {
@@ -145,6 +146,11 @@ export default function EmployerDashboard() {
               <span>Post A New Job</span>
             </div>
 
+            <div onClick={() => setActiveTab("myjobs")} className={menuClass("myjobs")}>
+  <FaBriefcase />
+  <span>My Jobs</span>
+</div>
+
             <div
               onClick={handleLogout}
               className="flex items-center gap-3 px-4 py-3 hover:text-red-500 cursor-pointer"
@@ -156,11 +162,13 @@ export default function EmployerDashboard() {
           </div>
         </div>
 
+
         {/* RIGHT SIDE */}
         <div className="flex-1 px-10 py-8">
           {activeTab === "dashboard" && <DashboardHome />}
           {activeTab === "post" && <PostJob />}
           {activeTab === "profile" && <CompanyProfile />}
+          {activeTab === "myjobs" && <MyJobs />}
         </div>
 
       </div>
