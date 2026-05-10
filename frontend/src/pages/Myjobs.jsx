@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
 
 export default function MyJobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const getMyJobs = async () => {
     try {
@@ -37,11 +40,6 @@ export default function MyJobs() {
     try {
       const token = localStorage.getItem("token");
 
-      if (!token) {
-        alert("Please login first");
-        return;
-      }
-
       const res = await API.delete(`/job/delete-job/${jobId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -50,8 +48,9 @@ export default function MyJobs() {
 
       alert(res.data.message);
 
-      // UI update instantly
-      setJobs((prev) => prev.filter((job) => job._id !== jobId));
+      setJobs((prev) =>
+        prev.filter((job) => job._id !== jobId)
+      );
     } catch (err) {
       console.log(err);
 
@@ -62,37 +61,54 @@ export default function MyJobs() {
     }
   };
 
+  // EDIT NAVIGATION
+  const editJob = (jobId) => {
+    navigate(`/edit-job/${jobId}`);
+  };
+
   useEffect(() => {
     getMyJobs();
   }, []);
 
   return (
-    <div>
+    <div className="bg-[#f5f7fc] min-h-screen p-4 sm:p-6">
+
       <h2 className="text-2xl font-semibold mb-6">
         My Jobs
       </h2>
 
       {loading ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-center text-gray-500">
+          Loading...
+        </p>
       ) : jobs.length === 0 ? (
-        <p className="text-gray-500">No jobs posted</p>
+        <div className="bg-white p-10 rounded-xl shadow-sm text-center">
+          <p className="text-gray-500 text-lg">
+            You haven't posted any jobs yet
+          </p>
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
+
           {jobs.map((job) => (
             <div
               key={job._id}
-              className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center"
+              className="bg-white p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between gap-5"
             >
-              <div>
-                <h3 className="font-semibold text-lg">
+
+              {/* LEFT */}
+              <div className="flex-1">
+
+                <h3 className="text-lg font-semibold">
                   {job.title}
                 </h3>
 
                 <p className="text-sm text-gray-500 mt-1">
-                  {job.description?.slice(0, 80)}...
+                  {job.description?.slice(0, 100)}...
                 </p>
 
-                <div className="flex gap-4 text-sm text-gray-500 mt-3 flex-wrap">
+                <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-3">
+
                   <span>
                     📍 {job?.address?.city || "N/A"}
                   </span>
@@ -104,17 +120,58 @@ export default function MyJobs() {
                   <span>
                     {job?.jobType || "N/A"}
                   </span>
+
                 </div>
+
+                <div className="flex flex-wrap gap-2 mt-3">
+
+                  {job?.industryType && (
+                    <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs">
+                      {job.industryType}
+                    </span>
+                  )}
+
+                  {job?.careerLevel && (
+                    <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
+                      {job.careerLevel}
+                    </span>
+                  )}
+
+                  <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs">
+                    Applicants: {job?.applicants?.length || 0}
+                  </span>
+
+                </div>
+
+                <p className="text-xs text-gray-400 mt-4">
+                  Posted on{" "}
+                  {new Date(job.createdAt).toLocaleDateString()}
+                </p>
+
               </div>
 
-              <button
-                onClick={() => deleteJob(job._id)}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-              >
-                Delete
-              </button>
+              {/* RIGHT */}
+              <div className="flex flex-row md:flex-col gap-3 justify-center">
+
+                <button
+                  onClick={() => editJob(job._id)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteJob(job._id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm"
+                >
+                  Delete
+                </button>
+
+              </div>
+
             </div>
           ))}
+
         </div>
       )}
     </div>

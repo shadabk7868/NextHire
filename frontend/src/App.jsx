@@ -13,6 +13,7 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import AuthModal from "./components/AuthModal";
  import AppliedJobs from "./pages/AppliedJobs";
+ import EditJob from "./pages/EditJob";
  import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css"
 
@@ -29,6 +30,7 @@ export default function App() {
 
         <Route path="/profile" element={<ProfileView />} />
       <Route path="/applied-jobs" element={<ProtectedRoute><AppliedJobs /></ProtectedRoute>} />
+      <Route path="/edit-job/:id" element={<EditJob />} />
       <Route path="/blog" element={<Blog/>} />
       <Route path="/contact" element={<Contact/>} />
       <Route path="/AuthModal" element={<AuthModal />} />
