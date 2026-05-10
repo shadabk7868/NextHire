@@ -5,7 +5,9 @@ const {
    createJob,
    getJobs,
    applyJob,
-   getAppliedJobs
+   getAppliedJobs,
+   getMyJobs,
+   deleteJob
 } = require("../controllers/jobController");
 
 const { auth, isEmployer } = require("../middlewares/auth");
@@ -19,5 +21,9 @@ router.get("/getjob", getJobs);
 router.post("/apply/:jobId", auth, applyJob);
 
 router.get("/applied-jobs", auth, getAppliedJobs);
+
+router.get("/my-jobs", auth, getMyJobs);
+
+router.delete("/delete-job/:jobId", auth, isEmployer, deleteJob);
 
 module.exports = router;

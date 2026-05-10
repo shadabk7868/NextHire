@@ -77,7 +77,8 @@ let login = AsyncHandler(async (req, res) => {
   message: "Login successful",
   token,
   data: {
-    role: user.role
+    role: user.role,
+    id: user._id
   }
 });
 });

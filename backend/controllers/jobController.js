@@ -1,8 +1,11 @@
 const Job = require("../models/jobModel");
 const AsyncHandler = require("../utils/AsyncHandler");
 const User = require("../models/userModel");
+const Employer = require("../models/employerModel");
 
 /* ================= CREATE JOB ================= */
+
+
 let createJob = AsyncHandler(async (req, res) => {
 
   let logo = req.file
@@ -18,6 +21,17 @@ let createJob = AsyncHandler(async (req, res) => {
     createdBy: req.user.id,
   });
 
+  await Employer.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: {
+        jobs: {
+          jobId: newjob._id,
+        },
+      },
+    }
+  );
+
   res.status(200).json({
     success: true,
     message: "Job created successfully",
@@ -28,7 +42,7 @@ let createJob = AsyncHandler(async (req, res) => {
 /* ================= GET ALL JOBS ================= */
 let getJobs = AsyncHandler(async (req, res) => {
   
-  let jobs = await Job.find().populate("createdBy", ["name", "email"]);
+  let jobs = await Job.find().populate("createdBy", ["name", "email","_id"]);
 
   res.status(200).json({
     success: true,
@@ -92,9 +106,61 @@ let getAppliedJobs = AsyncHandler(async (req, res) => {
   });
 });
 
+let getMyJobs = AsyncHandler(async (req, res) => {
+
+  if (req.user.role !== "employer") {
+    return res.status(403).json({
+      success: false,
+      message: "Only employers can access",
+    });
+  }
+
+  const jobs = await Job.find({
+  createdBy: req.user.id,
+})
+.populate("createdBy", "name email")
+.sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    data: jobs,
+  });
+});
+
+/* ================= Delete job ================= */
+
+let deleteJob = AsyncHandler(async (req, res) => {
+  const { jobId } = req.params;
+
+  const job = await Job.findById(jobId);
+
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      message: "Job not found",
+    });
+  }
+
+  if (job.createdBy.toString() !== req.user.id) {
+    return res.status(403).json({
+      success: false,
+      message: "Not authorized",
+    });
+  }
+
+  await job.deleteOne();
+
+  res.json({
+    success: true,
+    message: "Job deleted successfully",
+  });
+});
+
 module.exports = {
   createJob,
   getJobs,
   applyJob,
   getAppliedJobs,
+  getMyJobs,
+  deleteJob,
 };

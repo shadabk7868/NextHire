@@ -77,7 +77,8 @@ let loginEmployer = AsyncHandler(async (req, res) => {
   message: "Login successful",
   token,
   data: {
-    role: employer.role
+    role: employer.role,
+    id: employer._id 
   }
 });
 });

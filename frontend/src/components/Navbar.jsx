@@ -7,7 +7,7 @@ export default function Navbar() {
   const [showAuth, setShowAuth] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false); // 🔥 mobile menu
+  const [menuOpen, setMenuOpen] = useState(false); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");

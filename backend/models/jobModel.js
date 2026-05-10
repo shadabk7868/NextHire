@@ -11,7 +11,7 @@ let jobSchema = new mongoose.Schema({
     experience: Number,
     industryType: String,
     qualification: String,
-    deadlineData: String,
+    deadlineDate: String,
     address: {
         country: String,
         state: String,

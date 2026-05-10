@@ -21,7 +21,7 @@ let userSchema = new mongoose.Schema({
             instituteName: String,
             course: String,
             startingYear: Number,
-            EndingYear: Number,
+            endingYear: Number,
             description: String,
             _id: false
         }
@@ -34,7 +34,7 @@ let userSchema = new mongoose.Schema({
             role: String,
             description: String,
             startingYear: Number,
-            EndingYear: Number,
+            endingYear: Number,
         }
     ],
     languages: [],

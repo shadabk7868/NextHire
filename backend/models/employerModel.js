@@ -28,7 +28,7 @@ let employerSchema = new mongoose.Schema({
             }
         }
     ],
-    allAplicants: [
+    allApplicants: [
         {
             applicantId: {
                 type: mongoose.Schema.Types.ObjectId,

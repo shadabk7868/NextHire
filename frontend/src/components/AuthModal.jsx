@@ -44,7 +44,8 @@ export default function AuthModal({ onClose }) {
         }
 
         localStorage.setItem("token", data.token);
-        localStorage.setItem("role", role);
+localStorage.setItem("role", role);
+localStorage.setItem("userId", data?.data?.id || data?.data?._id);
 
         onClose();
 
