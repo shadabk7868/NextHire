@@ -1,0 +1,24 @@
+.env
+node_modules
+
+
+# git init
+# git add .
+# git commit -m "first commit"
+# git branch -M main
+# git remote add origin https://github.com/shadabk7868/jobportal.git
+# git push -u origin main
+
+# for update
+git add .
+git commit -m "second msg"
+git branch -M main
+git remote add origin https://github.com/shadabk7868/NextHire
+git push -u origin main
+# https://github.com/shadabk7868/jobportal
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/shadabk7868/NExt.git
+git push -u origin main
