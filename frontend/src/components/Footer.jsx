@@ -7,7 +7,7 @@ export default function Footer() {
         
         {/* LOGO + CONTACT */}
         <div>
-          <img src="logos.svg" alt="" />
+          <img src="./real logo.jpeg" alt="" />
           <p className="mt-3 text-m text-gray-500 leading-9">
             Call us <span className="text-blue-600 font-medium">123 456 7890</span>
             <br />

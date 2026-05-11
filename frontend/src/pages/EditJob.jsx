@@ -93,7 +93,7 @@ export default function EditJob() {
 
       alert(res.data.message);
 
-      navigate("/employer-dashboard");
+      navigate("/employers-dashboard");
 
     } catch (err) {
       console.log(err);
@@ -185,7 +185,6 @@ export default function EditJob() {
               value={form.city}
               onChange={handleChange}
             />
-
           </div>
 
           <button

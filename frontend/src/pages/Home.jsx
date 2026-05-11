@@ -1,9 +1,10 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import { FaMoneyBillWave, FaBullhorn, FaPaintBrush, FaCode, FaUserTie, FaCar, FaHeadset, FaBriefcaseMedical, FaProjectDiagram } from "react-icons/fa";
 
 export default function Home() {
@@ -59,111 +60,78 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-[#f5f7fc] min-h-screen">
+    <div className="bg-[#f5f7fc] min-h-screen overflow-x-hidden">
       <Navbar />
 
       {/* HERO SECTION */}
-      <div className="lg:px-[90px] md:px-10 px-6 py-16 bg-[#f5f7fc]">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+      <div
+        className="lg:px-[90px] md:px-10 px-4 sm:px-6 py-20 min-h-[700px] bg-cover bg-center bg-no-repeat relative flex items-center overflow-hidden"
+        style={{
+          backgroundImage: "url('./nexthirebg.jpg')",
+        }}
+      >
+
+        {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-black/60"></div>
+
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 w-full">
 
           {/* LEFT */}
-          <div className="w-full lg:max-w-[600px]">
+          <div className="w-full lg:max-w-[600px] mt-12">
 
-            <h1 className="text-[28px] sm:text-[34px] md:text-[40px] lg:text-[48px] leading-tight font-semibold text-gray-900 mb-6">
-              There Are <span className="text-blue-600 font-bold">93,178</span> Postings Here For you!
+            <h1 className="text-[28px] sm:text-[34px] md:text-[40px] lg:text-[52px] leading-tight font-semibold text-white mb-6">
+              There Are <span className="text-blue-400 font-bold">93,178</span> Postings Here For you!
             </h1>
 
-            <p className="text-gray-500 text-[14px] md:text-[15px] mb-6">
+            <p className="text-gray-200 text-[14px] md:text-[15px] mb-6">
               Find Jobs, Employment & Career Opportunities
             </p>
 
             {/* SEARCH BAR */}
-            <div className="w-full max-w-[730px] h-auto md:h-[70px] bg-white shadow-md rounded-lg flex flex-col md:flex-row items-center overflow-hidden px-2">
+            <div className="w-full max-w-[730px] bg-white shadow-xl rounded-lg flex flex-col md:flex-row items-stretch md:items-center overflow-hidden p-2 gap-2 md:gap-0">
 
               <input
                 placeholder="Job title, keywords, or company"
-                className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px] outline-none border-b md:border-b-0 "
+                className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none md:border-r"
               />
 
               <input
                 placeholder="City or postcode"
-                className="w-full md:flex-1 h-[50px] md:h-full px-5 text-[14px] outline-none"
+                className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none"
               />
 
-              <button className="bg-blue-600 text-white px-8 h-[50px] md:h-[50px] text-[14px] font-medium rounded-md md:ml-2 mt-2 md:mt-0 hover:bg-blue-700 transition w-full md:w-auto">
+              <Link
+                to="/jobs"
+                className="bg-blue-600 text-white px-8 h-[50px] text-[14px] font-medium rounded-md hover:bg-blue-700 transition w-full md:w-auto flex items-center justify-center whitespace-nowrap"
+              >
                 Find Jobs
-              </button>
+              </Link>
 
             </div>
 
-            <p className="text-[13px] text-gray-500 mt-4">
-              <span className="font-medium text-gray-700">Popular Searches :</span>{" "}
+            <p className="text-[13px] text-gray-200 mt-4">
+              <span className="font-medium text-white">Popular Searches :</span>{" "}
               Designer, Developer, Web, IOS, PHP, Senior, Engineer
             </p>
           </div>
 
-          <div className="w-full lg:w-1/2 relative flex justify-center">
-
-            <img
-              src="banner-img-1.webp"
-              alt=""
-              className="w-[260px] sm:w-[320px] md:w-[400px] lg:w-[520px] xl:w-[600px] h-auto object-contain"
-            />
-
-            {/* CARD 1 */}
-            <div className="hidden sm:flex absolute lg:top-[30px] md:top-[20px] top-[10px] left-[0px] bg-white shadow-md rounded-lg px-3 py-2 items-center gap-2">
-              <div className="w-6 h-6 bg-yellow-100 rounded-lg"></div>
-              <div>
-                <p className="text-[12px] font-medium">Work Inquiry</p>
-                <p className="text-[10px] text-gray-500">Ali Tufan</p>
-              </div>
-            </div>
-
-            {/* CARD 2 */}
-            <div className="hidden md:block absolute lg:top-[70px] md:top-[50px] right-[0px] bg-white shadow-md rounded-lg px-3 py-2">
-              <p className="text-[12px] font-semibold mb-1">10k+ Candidates</p>
-              <div className="flex -space-x-2">
-                <div className="w-6 h-6 bg-gray-300 rounded-full border-2 border-white"></div>
-                <div className="w-6 h-6 bg-gray-400 rounded-full border-2 border-white"></div>
-                <div className="w-6 h-6 bg-gray-500 rounded-full border-2 border-white"></div>
-              </div>
-            </div>
-
-            {/* CARD 3 */}
-            <div className="hidden lg:flex absolute bottom-[90px] right-[0px] bg-white shadow-md rounded-lg px-3 py-2 items-center gap-2">
-              <div className="w-7 h-7 bg-red-100 rounded-lg"></div>
-              <div>
-                <p className="text-[12px] font-semibold">Agency</p>
-                <p className="text-[10px] text-gray-500">Startup</p>
-              </div>
-            </div>
-
-            {/* CARD 4 */}
-            <div className="hidden lg:flex absolute bottom-[10px] left-[30px] bg-white shadow-md rounded-lg px-3 py-2 items-center gap-2">
-              <div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center text-xs">
-                ⬆️
-              </div>
-              <div>
-                <p className="text-[12px] font-semibold">Upload CV</p>
-                <p className="text-[10px] text-gray-500">Few seconds</p>
-              </div>
-            </div>
-
-          </div>
         </div>
       </div>
 
       {/* POPULAR CATEGORIES */}
-      <div className="lg:px-[90px] md:px-10 px-8 py-16 bg-[#f5f7fc]">
+      <div className="lg:px-[90px] md:px-10 px-6 py-16 bg-[#f5f7fc]">
 
         <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold">Popular Job Categories</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">
+            Popular Job Categories
+          </h2>
+
           <p className="text-gray-500 mt-2 text-sm">
             2020 jobs live - 293 added today.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 m:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
           {[
             { title: "Accounting / Finance", jobs: "2 open positions", icon: <FaMoneyBillWave /> },
@@ -182,14 +150,18 @@ export default function Home() {
               className="rounded-2xl p-6 flex items-center gap-4 bg-white hover:shadow-md transition"
             >
 
-              {/* ICON BOX (same size) */}
-              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-blue-600 text-xl">
+              <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-blue-600 text-xl flex-shrink-0">
                 {item.icon}
               </div>
 
               <div>
-                <h3 className="font-semibold">{item.title}</h3>
-                <p className="text-gray-500 text-sm">{item.jobs}</p>
+                <h3 className="font-semibold">
+                  {item.title}
+                </h3>
+
+                <p className="text-gray-500 text-sm">
+                  {item.jobs}
+                </p>
               </div>
 
             </div>
@@ -197,17 +169,19 @@ export default function Home() {
           ))}
 
         </div>
-
       </div>
 
       {/* FEATURED JOBS */}
-
       <div className="lg:px-[90px] px-6 py-16 bg-white">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Featured Jobs</h2>
+          <h2 className="text-3xl font-bold">
+            Featured Jobs
+          </h2>
+
           <p className="text-gray-500 mt-2">
             Know your worth and find the job that qualify your life
           </p>
+
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,23 +189,20 @@ export default function Home() {
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
             <div
               key={i}
-              className="rounded-2xl p-6 flex gap-4 items-start hover:shadow-lg transition-all bg-white"
+              className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start hover:shadow-lg transition-all bg-white overflow-hidden"
             >
 
-              {/* IMAGE (dynamic) */}
               <img
                 src={images[i]}
                 alt="company logo"
                 className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
               />
 
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <h3 className="font-semibold text-lg">
-                    Software Engineer (Android), Libraries
-                  </h3>
+              <div className="flex-1 w-full">
 
-                </div>
+                <h3 className="font-semibold text-base sm:text-lg break-words">
+                  Software Engineer (Android), Libraries
+                </h3>
 
                 <div className="flex flex-wrap gap-4 text-gray-500 text-sm mt-2">
                   <span>Segment</span>
@@ -240,84 +211,109 @@ export default function Home() {
                   <span>$35k - $45k</span>
                 </div>
 
-                <div className="flex gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-4">
+
                   <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs">
                     Full Time
                   </span>
+
                   <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
                     Private
                   </span>
+
                   <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-xs">
                     Urgent
                   </span>
-                </div>
-              </div>
-            </div>
-          ))}
 
+                </div>
+
+              </div>
+
+            </div>
+
+          ))}
         </div>
       </div>
 
       {/* TESTIMONIALS SECTION */}
-      <div className="lg:px-[90px] px-6 py-16 bg-gray-100">
+      <div className="lg:px-[90px] md:px-10 px-4 py-16 bg-gray-100 overflow-hidden">
+
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl md:text-3xl font-bold">
             Testimonials From Our Customers
           </h2>
-          <p className="text-gray-500 mt-2">
+
+          <p className="text-gray-500 mt-2 text-sm md:text-base">
             Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
           </p>
         </div>
 
         <Swiper
-          slidesPerView={3}
-          spaceBetween={20}
-          centeredSlides={true}
+          slidesPerView={1}
+          spaceBetween={80}
           loop={true}
-          speed={800}
-          grabCursor={true}
-          watchSlidesProgress={true}
-          pagination={{ clickable: true }}
-          modules={[Pagination]}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
+          speed={900}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
           }}
+          pagination={{ clickable: true }}
+          modules={[Pagination, Autoplay]}
+          breakpoints={{
+            640: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+          className="pb-12"
         >
+
           {testimonials.map((item, index) => (
-            <SwiperSlide key={index}>
-              {({ isActive }) => (
-                <div
-                  className={`p-6 rounded-2xl transition-all duration-500 transform
-            ${isActive
-                      ? "bg-white shadow-2xl scale-105 opacity-100"
-                      : "bg-white/60 scale-90 opacity-50"
-                    }`}
-                >
+
+            <SwiperSlide key={index} className="h-auto">
+
+              <div className="bg-white rounded-2xl shadow-md p-6 h-full min-h-[320px] flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+
+                <div>
+
                   <h3 className="text-blue-600 font-semibold text-lg mb-3">
                     {item.title}
                   </h3>
 
-                  <p className="text-gray-600 text-sm mb-6">
+                  <p className="text-gray-600 text-sm leading-7">
                     {item.text}
                   </p>
 
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <h4 className="font-semibold">{item.name}</h4>
-                      <p className="text-gray-500 text-sm">{item.role}</p>
-                    </div>
+                </div>
+
+                <div className="flex items-center gap-3 mt-6">
+
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+
+                  <div>
+                    <h4 className="font-semibold">
+                      {item.name}
+                    </h4>
+
+                    <p className="text-gray-500 text-sm">
+                      {item.role}
+                    </p>
                   </div>
                 </div>
-              )}
+              </div>
             </SwiperSlide>
+
           ))}
+
         </Swiper>
       </div>
 
@@ -325,7 +321,6 @@ export default function Home() {
       <div className="w-full py-10 bg-white">
 
         <div className="lg:px-[90px] px-6">
-
           <div className="flex flex-wrap justify-center lg:justify-between gap-6 items-center">
 
             <img
@@ -333,55 +328,57 @@ export default function Home() {
               alt="mencap"
               className="h-8 object-contain"
             />
+
             <img
               src="1-2 ha.webp"
               alt="herbal"
               className="h-8 object-contain"
             />
+
             <img
               src="1-2 ha.webp"
               alt="mencap"
               className="h-8 object-contain"
             />
+
             <img
               src="1-2 ha.webp"
               alt="herbal"
               className="h-8 object-contain"
             />
+
             <img
               src="1-3 ha.webp"
               alt="nonstop"
               className="h-8 object-contain"
             />
+
             <img
               src="1-4 ha.webp"
               alt="michaelpage"
               className="h-8 object-contain"
             />
 
-          </div>
+         </div>
         </div>
       </div>
 
       {/* HERO */}
       <div className="lg:px-[90px] px-6 py-20">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
-
-
           <div className="w-full lg:w-1/2 relative">
 
             <img
               src="badi image.webp"
               alt="job"
-              className="w-full h-[400px] object-cover rounded-2xl"
+              className="w-full h-[250px] sm:h-[320px] md:h-[400px] object-cover rounded-2xl"
             />
-
 
           </div>
 
-          {/* RIGHT CONTENT */}
           <div className="w-full lg:w-1/2">
-            <h2 className="text-4xl font-bold mb-6 leading-tight">
+
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
               Millions of Jobs. Find the one that suits you.
             </h2>
 
@@ -390,57 +387,72 @@ export default function Home() {
             </p>
 
             <div className="space-y-3 mb-6">
+
               <div className="flex items-center gap-2">
                 <span className="text-blue-600">✔</span>
-                <p className="text-gray-600">Bring to the table win-win survival</p>
+                <p className="text-gray-600">
+                  Bring to the table win-win survival
+                </p>
               </div>
+
               <div className="flex items-center gap-2">
                 <span className="text-blue-600">✔</span>
-                <p className="text-gray-600">Capitalize on low hanging fruit to identify</p>
+                <p className="text-gray-600">
+                  Capitalize on low hanging fruit to identify
+                </p>
               </div>
+
               <div className="flex items-center gap-2">
                 <span className="text-blue-600">✔</span>
-                <p className="text-gray-600">But I must explain to you how all this</p>
+                <p className="text-gray-600">
+                  But I must explain to you how all this
+                </p>
               </div>
+
             </div>
 
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg">
+            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
               Get Started
             </button>
           </div>
-
         </div>
       </div>
 
-
-      {/* STATS SECTION*/}
+      {/* STATS SECTION */}
       <div className="lg:px-[90px] px-6 py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 text-center gap-10">
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 text-center gap-10">
           <div>
-            <h2 className="text-5xl font-bold">4M</h2>
+            <h2 className="text-5xl font-bold">
+              4M
+            </h2>
+
             <p className="text-gray-500 mt-2">
               4 million daily active users
             </p>
           </div>
 
           <div>
-            <h2 className="text-5xl font-bold">12k</h2>
+            <h2 className="text-5xl font-bold">
+              12k
+            </h2>
+
             <p className="text-gray-500 mt-2">
               Over 12k open job positions
             </p>
           </div>
 
           <div>
-            <h2 className="text-5xl font-bold">20M</h2>
+            <h2 className="text-5xl font-bold">
+              20M
+            </h2>
+
             <p className="text-gray-500 mt-2">
               Over 20 million stories shared
             </p>
           </div>
-
         </div>
       </div>
-
 
       <Footer />
     </div>

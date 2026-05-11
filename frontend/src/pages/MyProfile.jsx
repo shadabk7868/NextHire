@@ -34,7 +34,6 @@ export default function MyProfile() {
 
         if (!data) return;
 
-        // 🔥 check if profile exists
         if (data.name || data.phoneNumber) {
           setIsEdit(false);
         }
@@ -94,7 +93,7 @@ export default function MyProfile() {
 
       alert(res.data.message);
 
-      setIsEdit(false); // 🔥 switch to view mode
+      setIsEdit(false); 
 
     } catch (err) {
       console.log(err);
