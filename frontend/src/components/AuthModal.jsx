@@ -14,6 +14,26 @@ export default function AuthModal({ onClose }) {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (!email || !password) {
+      alert("Email aur Password required hai");
+      return;
+    }
+
+    if (!email.includes("@") || !email.includes(".com")) {
+      alert("Invalid email format");
+      return;
+    }
+
+    if (!isLogin && !name.trim()) {
+      alert("Name required hai");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Password at least 6 characters ka hona chahiye");
+      return;
+    }
+
     try {
       let url;
 
@@ -85,8 +105,8 @@ export default function AuthModal({ onClose }) {
           <button
             onClick={() => setRole("candidate")}
             className={`flex-1 py-2 rounded-lg ${role === "candidate"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100"
               }`}
           >
             Candidate
@@ -95,8 +115,8 @@ export default function AuthModal({ onClose }) {
           <button
             onClick={() => setRole("employer")}
             className={`flex-1 py-2 rounded-lg ${role === "employer"
-                ? "bg-green-600 text-white"
-                : "bg-gray-100"
+              ? "bg-green-600 text-white"
+              : "bg-gray-100"
               }`}
           >
             Employer

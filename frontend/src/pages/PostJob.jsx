@@ -32,6 +32,8 @@ export default function Postjob() {
     try {
       setLoading(true);
 
+      const token = localStorage.getItem("token");
+
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -46,7 +48,6 @@ export default function Postjob() {
       formData.append("qualification", form.qualification);
       formData.append("deadlineData", form.deadlineData);
 
-      // address
       formData.append("address[city]", form.city);
       formData.append("address[state]", form.state);
       formData.append("address[country]", form.country);
@@ -59,6 +60,7 @@ export default function Postjob() {
       const res = await API.post("/job/create-job", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 
