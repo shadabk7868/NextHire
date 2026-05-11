@@ -30,7 +30,7 @@ export default function Navbar() {
 
           {/* LOGO */}
           <Link to="/">
-            <img src="/logos.svg" alt="logo" className="h-10 md:h-12" />
+            <img src="/real logo.jpeg" alt="logo" className="h-16 md:h-17" />
           </Link>
 
           {/* DESKTOP MENU */}
@@ -93,7 +93,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* 🔥 MOBILE MENU */}
         {menuOpen && (
           <div className="fixed inset-0 bg-black/40 z-50">
             <div className="bg-white w-[260px] h-full p-6 shadow-lg">
