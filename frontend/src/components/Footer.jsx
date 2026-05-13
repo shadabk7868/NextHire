@@ -22,10 +22,9 @@ export default function Footer() {
           <h3 className="font-semibold text-l mb-8 text-gray-900">For Candidates</h3>
           <ul className="space-y-4 text-sm text-gray-500">
             <li className="hover:text-blue-600 cursor-pointer">Browse Jobs</li>
-            <li className="hover:text-blue-600 cursor-pointer">Browse Categories</li>
+            <li className="hover:text-blue-600 cursor-pointer">Search Categories</li>
             <li className="hover:text-blue-600 cursor-pointer">Candidate Dashboard</li>
-            <li className="hover:text-blue-600 cursor-pointer">Job Alerts</li>
-            <li className="hover:text-blue-600 cursor-pointer">My Bookmarks</li>
+            <li className="hover:text-blue-600 cursor-pointer">Applied</li>
           </ul>
         </div>
 
@@ -33,10 +32,10 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-8 text-gray-900">For Employers</h3>
           <ul className="space-y-4 text-sm text-gray-500">
-            <li className="hover:text-blue-600 cursor-pointer">Browse Candidates</li>
-            <li className="hover:text-blue-600 cursor-pointer">Employer Dashboard</li>
-            <li className="hover:text-blue-600 cursor-pointer">Add Job</li>
-            <li className="hover:text-blue-600 cursor-pointer">Job Packages</li>
+            <li className="hover:text-blue-600 cursor-pointer">Post Job</li>
+            <li className="hover:text-blue-600 cursor-pointer">Browse Applicants</li>
+              <li className="hover:text-blue-600 cursor-pointer">Dashboard</li>
+              <li className="hover:text-blue-600 cursor-pointer">My Jobs</li>
           </ul>
         </div>
 
@@ -44,9 +43,6 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-8 text-gray-900">About Us</h3>
           <ul className="space-y-4 text-sm text-gray-500">
-            <li className="hover:text-blue-600 cursor-pointer">About us</li>
-            <li className="hover:text-blue-600 cursor-pointer">Job page invoice</li>
-            <li className="hover:text-blue-600 cursor-pointer">Term page</li>
             <li className="hover:text-blue-600 cursor-pointer">Blog </li>
             <li className="hover:text-blue-600 cursor-pointer">Contact</li>
           </ul>
@@ -72,3 +68,4 @@ export default function Footer() {
     </footer>
   );
 }
+

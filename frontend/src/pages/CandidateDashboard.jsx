@@ -216,7 +216,7 @@ export default function CandidateDashboard() {
             }`}
         >
 
-          <div className="flex flex-col gap-3 text-[15px]">
+          <div className="flex flex-col gap-3 text-[15px] pt-10">
 
             {/* DASHBOARD */}
             <div
@@ -279,19 +279,17 @@ export default function CandidateDashboard() {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 py-6">
+        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px]">
 
           {/* MOBILE HAMBURGER */}
-          <div className="lg:hidden mb-5 relative z-50">
-
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="bg-white p-3 rounded-xl shadow-md text-xl relative z-50"
-            >
-              <FaBars />
-            </button>
-
-          </div>
+<div className="lg:hidden fixed top-[90px] left-4 z-50">
+  <button
+    onClick={() => setSidebarOpen(!sidebarOpen)}
+    className="bg-white p-3 rounded-xl shadow-md text-xl"
+  >
+    <FaBars />
+  </button>
+</div>
 
           {activeTab === "dashboard" && <DashboardHome />}
           {activeTab === "profile" && <MyProfile />}

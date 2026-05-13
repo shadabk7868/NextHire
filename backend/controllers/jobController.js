@@ -5,7 +5,6 @@ const Employer = require("../models/employerModel");
 
 /* ================= CREATE JOB ================= */
 
-
 let createJob = AsyncHandler(async (req, res) => {
 
   let logo = req.file
@@ -40,9 +39,11 @@ let createJob = AsyncHandler(async (req, res) => {
 });
 
 /* ================= GET ALL JOBS ================= */
+
 let getJobs = AsyncHandler(async (req, res) => {
-  
-  let jobs = await Job.find().populate("createdBy", ["name", "email","_id"]);
+
+  let jobs = await Job.find()
+    .populate("createdBy", ["name", "email", "_id"]);
 
   res.status(200).json({
     success: true,
@@ -51,7 +52,9 @@ let getJobs = AsyncHandler(async (req, res) => {
 });
 
 /* ================= APPLY JOB ================= */
+
 let applyJob = AsyncHandler(async (req, res) => {
+
   let { jobId } = req.params;
 
   if (req.user.role !== "candidate") {
@@ -62,6 +65,7 @@ let applyJob = AsyncHandler(async (req, res) => {
   }
 
   let job = await Job.findById(jobId);
+
   let user = await User.findById(req.user.id);
 
   if (!job) {
@@ -84,9 +88,13 @@ let applyJob = AsyncHandler(async (req, res) => {
 
   // save both
   job.applicants.push(req.user.id);
+
   await job.save();
 
-  user.appliedJobs.push({ appliedJobId: jobId });
+  user.appliedJobs.push({
+    appliedJobId: jobId
+  });
+
   await user.save();
 
   res.json({
@@ -96,7 +104,9 @@ let applyJob = AsyncHandler(async (req, res) => {
 });
 
 /* ================= GET APPLIED JOBS ================= */
+
 let getAppliedJobs = AsyncHandler(async (req, res) => {
+
   let user = await User.findById(req.user.id)
     .populate("appliedJobs.appliedJobId");
 
@@ -105,6 +115,8 @@ let getAppliedJobs = AsyncHandler(async (req, res) => {
     data: user.appliedJobs,
   });
 });
+
+/* ================= GET MY JOBS ================= */
 
 let getMyJobs = AsyncHandler(async (req, res) => {
 
@@ -116,10 +128,10 @@ let getMyJobs = AsyncHandler(async (req, res) => {
   }
 
   const jobs = await Job.find({
-  createdBy: req.user.id,
-})
-.populate("createdBy", "name email")
-.sort({ createdAt: -1 });
+    createdBy: req.user.id,
+  })
+    .populate("createdBy", "name email")
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     success: true,
@@ -127,8 +139,37 @@ let getMyJobs = AsyncHandler(async (req, res) => {
   });
 });
 
+/* ================= GET APPLIED CANDIDATES ================= */
+
+let getMyJobsApplicants = AsyncHandler(async (req, res) => {
+
+  if (req.user.role !== "employer") {
+    return res.status(403).json({
+      success: false,
+      message: "Only employers can access",
+    });
+  }
+
+  const jobs = await Job.find({
+    createdBy: req.user.id,
+  })
+    .populate({
+      path: "applicants",
+      select:
+        "name email phoneNumber experience educationLevel jobTitle languages profileImage resume",
+    })
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    data: jobs,
+  });
+});
+
+/* ================= UPDATE JOB ================= */
 
 let updateJob = AsyncHandler(async (req, res) => {
+
   const { jobId } = req.params;
 
   const job = await Job.findById(jobId);
@@ -161,9 +202,10 @@ let updateJob = AsyncHandler(async (req, res) => {
   });
 });
 
-/* ================= Delete job ================= */
+/* ================= DELETE JOB ================= */
 
 let deleteJob = AsyncHandler(async (req, res) => {
+
   const { jobId } = req.params;
 
   const job = await Job.findById(jobId);
@@ -196,6 +238,7 @@ module.exports = {
   applyJob,
   getAppliedJobs,
   getMyJobs,
+  getMyJobsApplicants,
   updateJob,
   deleteJob,
 };

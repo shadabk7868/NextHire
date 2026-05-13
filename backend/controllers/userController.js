@@ -87,21 +87,24 @@ let login = AsyncHandler(async (req, res) => {
 let updatePersonalInfo = AsyncHandler(async (req, res) => {
   let id = req.user.id;
  
-  let { name,
-    address,
-    phoneNumber,
-    experience,
-    age,
-    educationLevel,
-    gender,
-    currentSalary,
-    expectedSalary,
-    languages,
-    skills,
-    education,
-    keywords,
-    workExperience,
-  } = req.body;
+  let {
+  name,
+  jobTitle,
+  email,
+  address,
+  phoneNumber,
+  experience,
+  age,
+  educationLevel,
+  gender,
+  currentSalary,
+  expectedSalary,
+  languages,
+  skills,
+  education,
+  keywords,
+  workExperience,
+} = req.body;
   let file = req.file
   let profileImage = {};
  
@@ -119,26 +122,28 @@ let updatePersonalInfo = AsyncHandler(async (req, res) => {
   }
  
   let updated = await User.findByIdAndUpdate(
-    id,
-    {
-      name,
-      address,
-      phoneNumber,
-      experience,
-      age,
-      educationLevel,
-      gender,
-      currentSalary,
-      expectedSalary,
-      languages,
-      skills,
-      education,
-      keywords,
-      workExperience,
-      profileImage
-    },
-    { new: true }
-  );
+  id,
+  {
+    name,
+    jobTitle,
+    email,
+    address,
+    phoneNumber,
+    experience,
+    age,
+    educationLevel,
+    gender,
+    currentSalary,
+    expectedSalary,
+    languages,
+    skills,
+    education,
+    keywords,
+    workExperience,
+    profileImage
+  },
+  { new: true }
+);
  
   res.status(200).json({
     success: true,

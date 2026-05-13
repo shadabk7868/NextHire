@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
   FaHome,
   FaPlusCircle,
   FaSignOutAlt,
   FaBriefcase,
+  FaUsers,
   FaBars,
 } from "react-icons/fa";
 
 import Navbar from "../components/Navbar";
+import AppliedCandidates from "./AppliedCandidates";
 import CompanyProfile from "../pages/CompanyProfile";
 import PostJob from "../pages/PostJob";
 import MyJobs from "./Myjobs";
@@ -17,14 +20,13 @@ import { useNavigate } from "react-router-dom";
 function DashboardHome() {
   const [stats, setStats] = useState({
     postedJobs: 0,
-    activeJobs: 0,
+    totalApplicants: 0,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-
         if (!token) return;
 
         const res = await axios.get(
@@ -38,13 +40,14 @@ function DashboardHome() {
 
         const jobs = res.data?.data || [];
 
-        const activeJobs = jobs.filter(
-          (job) => job.status !== "closed"
-        ).length;
+        // TOTAL APPLICANTS CALCULATION
+        const totalApplicants = jobs.reduce((acc, job) => {
+          return acc + (job?.applicants?.length || 0);
+        }, 0);
 
         setStats({
           postedJobs: jobs.length,
-          activeJobs,
+          totalApplicants,
         });
 
       } catch (err) {
@@ -86,21 +89,21 @@ function DashboardHome() {
 
         </div>
 
-        {/* ACTIVE JOBS */}
+        {/* TOTAL APPLICANTS */}
         <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
 
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-600">
-              {stats.activeJobs}
+            <h2 className="text-3xl md:text-4xl font-bold text-green-600">
+              {stats.totalApplicants}
             </h2>
 
             <p className="text-gray-500 text-sm mt-1">
-              Active Jobs
+              Total Applicants
             </p>
           </div>
 
-          <div className="bg-purple-100 p-4 rounded-xl text-purple-600 text-2xl">
-            <FaBriefcase />
+          <div className="bg-green-100 p-4 rounded-xl text-green-600 text-2xl">
+            <FaUsers />
           </div>
 
         </div>
@@ -112,7 +115,17 @@ function DashboardHome() {
 
 export default function EmployerDashboard() {
 
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [searchParams] = useSearchParams();
+
+  const [activeTab, setActiveTab] = useState(
+    searchParams.get("tab") || "dashboard"
+  );
+
+  useEffect(() => {
+    setActiveTab(searchParams.get("tab") || "dashboard");
+  }, [searchParams]);
+
+  const selectedJobId = searchParams.get("jobId");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -158,7 +171,7 @@ export default function EmployerDashboard() {
             }`}
         >
 
-          <div className="flex flex-col gap-3 text-[15px]">
+          <div className="flex flex-col gap-3 text-[15px] pt-10">
 
             {/* DASHBOARD */}
             <div
@@ -196,6 +209,18 @@ export default function EmployerDashboard() {
               <span>My Jobs</span>
             </div>
 
+            {/* APPLIED CANDIDATES */}
+            <div
+              onClick={() => {
+                setActiveTab("appliedCandidates");
+                setSidebarOpen(false);
+              }}
+              className={menuClass("appliedCandidates")}
+            >
+              <FaUsers />
+              <span>Applicants</span>
+            </div>
+
             {/* LOGOUT */}
             <div
               onClick={handleLogout}
@@ -209,23 +234,24 @@ export default function EmployerDashboard() {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 py-6">
+        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px]">
 
-          <div className="lg:hidden mb-5 relative z-50">
-
+          {/* MOBILE HAMBURGER */}
+          <div className="lg:hidden fixed top-[90px] left-4 z-50">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="bg-white p-3 rounded-xl shadow-md text-xl relative z-50"
+              className="bg-white p-3 rounded-xl shadow-md text-xl"
             >
               <FaBars />
             </button>
-
           </div>
+
 
           {activeTab === "dashboard" && <DashboardHome />}
           {activeTab === "post" && <PostJob />}
           {activeTab === "profile" && <CompanyProfile />}
           {activeTab === "myjobs" && <MyJobs />}
+          {activeTab === "appliedCandidates" && (<AppliedCandidates jobId={selectedJobId} />)}
 
         </div>
 

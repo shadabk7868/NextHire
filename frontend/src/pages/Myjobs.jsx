@@ -137,15 +137,24 @@ export default function MyJobs() {
                     </span>
                   )}
 
-                  <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs">
+                  <span
+                    onClick={() => navigate(
+                      `/employers-dashboard?tab=appliedCandidates&jobId=${encodeURIComponent(job._id)}`
+                    )}
+                    className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs cursor-pointer hover:bg-purple-200"
+                  >
                     Applicants: {job?.applicants?.length || 0}
                   </span>
 
                 </div>
 
                 <p className="text-xs text-gray-400 mt-4">
-                  Posted on{" "}
-                  {new Date(job.createdAt).toLocaleDateString()}
+                  Posted{" "}
+                  {Math.floor(
+                    (new Date() - new Date(job.createdAt)) /
+                    (1000 * 60 * 60 * 24)
+                  )}{" "}
+                  days ago
                 </p>
 
               </div>

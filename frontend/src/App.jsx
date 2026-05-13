@@ -10,6 +10,7 @@ import Candidate from "./pages/Candidate";
 import CandidateDetails from "./pages/CandidateDetails";
 import ProfileView from "./pages/ProfileView";
 import Blog from "./pages/Blog";
+import BlogDetail from './pages/BlogDeatail'
 import Contact from "./pages/Contact";
 import AuthModal from "./components/AuthModal";
  import AppliedJobs from "./pages/AppliedJobs";
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/applied-jobs" element={<ProtectedRoute><AppliedJobs /></ProtectedRoute>} />
       <Route path="/edit-job/:id" element={<EditJob />} />
       <Route path="/blog" element={<Blog/>} />
+      <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/contact" element={<Contact/>} />
       <Route path="/AuthModal" element={<AuthModal />} />
 

@@ -197,6 +197,19 @@ export default function FindJobs() {
                           </span>
                         )}
                       </div>
+
+                      <p className="text-xs text-gray-400 mt-3">
+                        {(() => {
+                          const days = Math.floor(
+                            (new Date() - new Date(job.createdAt)) /
+                            (1000 * 60 * 60 * 24)
+                          );
+
+                          return days === 0
+                            ? "Posted Today"
+                            : `Posted ${days} days ago`;
+                        })()}
+                      </p>
                     </div>
 
                     {/* RIGHT */}

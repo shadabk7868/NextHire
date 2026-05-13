@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function MyProfile() {
+
   const [image, setImage] = useState(null);
+
   const [isEdit, setIsEdit] = useState(true);
 
   const [form, setForm] = useState({
@@ -16,66 +18,88 @@ export default function MyProfile() {
     expectedSalary: "",
     age: "",
     languages: "",
-    description: ""
+    description: "",
+    profileImage: ""
   });
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get("http://localhost:4000/api/user/getprofile", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
-
-        const data = res?.data?.data;
-
-        if (!data) return;
-
-        if (data.name || data.phoneNumber) {
-          setIsEdit(false);
-        }
-
-        setForm({
-          name: data.name || "",
-          phoneNumber: data.phoneNumber || "",
-          jobTitle: data.jobTitle || "",
-          email: data.email || "",
-          experience: data.experience || "",
-          educationLevel: data.educationLevel || "",
-          currentSalary: data.currentSalary || "",
-          expectedSalary: data.expectedSalary || "",
-          age: data.age || "",
-          languages: data.languages?.join(", ") || "",
-          description: data.keywords?.join(", ") || ""
-        });
-
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProfile();
   }, []);
 
+  const fetchProfile = async () => {
+
+    try {
+
+      const res = await axios.get(
+        "https://nexthire-i1hx.onrender.com/api/user/getprofile",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      const data = res?.data?.data;
+
+      if (!data) return;
+
+      const profileExists =
+        !!data?.name &&
+        !!data?.phoneNumber;
+
+      setIsEdit(!profileExists);
+
+
+      setForm({
+        name: data.name || "",
+        phoneNumber: data.phoneNumber || "",
+        jobTitle: data.jobTitle || "",
+        email: data.email || "",
+        experience: data.experience || "",
+        educationLevel: data.educationLevel || "",
+        currentSalary: data.currentSalary || "",
+        expectedSalary: data.expectedSalary || "",
+        age: data.age || "",
+        languages: data.languages?.join(", ") || "",
+        description: data.keywords?.join(", ") || "",
+        profileImage: data.profileImage?.url || "",
+      });
+
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSave = async () => {
+
     try {
+
       const formData = new FormData();
 
       Object.keys(form).forEach((key) => {
         formData.append(key, form[key]);
       });
 
-      formData.set("languages", JSON.stringify(form.languages.split(",")));
-      formData.set("keywords", JSON.stringify(form.description.split(",")));
+      formData.set(
+        "languages",
+        JSON.stringify(form.languages.split(","))
+      );
+
+      formData.set(
+        "keywords",
+        JSON.stringify(form.description.split(","))
+      );
 
       if (image) {
         formData.append("profileImage", image);
@@ -93,7 +117,9 @@ export default function MyProfile() {
 
       alert(res.data.message);
 
-      setIsEdit(false); 
+      await fetchProfile();
+
+      setIsEdit(false);
 
     } catch (err) {
       console.log(err);
@@ -101,7 +127,13 @@ export default function MyProfile() {
     }
   };
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) {
+    return (
+      <p className="text-gray-500">
+        Loading...
+      </p>
+    );
+  }
 
   return (
     <>
@@ -111,135 +143,204 @@ export default function MyProfile() {
 
       <div className="bg-white p-8 rounded-2xl shadow-sm mt-6">
 
+        {/* =========================
+            PROFILE VIEW
+        ========================== */}
 
         {!isEdit ? (
+
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* TOP PROFILE CARD */}
 
-              {/* PERSONAL INFO */}
-              <div className="bg-[#f5f7fc] p-6 rounded-xl">
-                <h3 className="font-semibold text-lg mb-4">Personal Info</h3>
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white">
 
-                <div className="space-y-2 text-m">
-                  <p><span className="text-gray-500 ">Name:</span> {form.name}</p>
-                  <p><span className="text-gray-500">Phone:</span> {form.phoneNumber}</p>
-                  <p><span className="text-gray-500">Email:</span> {form.email}</p>
-                  <p><span className="text-gray-500">Age:</span> {form.age}</p>
+              <div className="flex flex-col md:flex-row items-center gap-8">
+
+                <img
+                  src={
+                    form.profileImage ||
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                  }
+                  alt=""
+                  className="w-32 h-32 rounded-full border-4 border-white object-cover"
+                />
+
+                <div className="flex-1">
+
+                  <h2 className="text-4xl font-bold">
+                    {form.name}
+                  </h2>
+
+                  <p className="text-blue-100 mt-2 text-lg">
+                    {form.jobTitle}
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 mt-5">
+
+                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm">
+                      {form.experience}
+                    </span>
+
+                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm">
+                      {form.educationLevel}
+                    </span>
+
+                  </div>
+
                 </div>
+
               </div>
+            </div>
 
-              {/* PROFESSIONAL INFO */}
-              <div className="bg-[#f5f7fc] p-6 rounded-xl">
-                <h3 className="font-semibold text-lg mb-4">Professional Info</h3>
+            {/* DETAILS */}
 
-                <div className="space-y-2 text-m">
-                  <p><span className="text-gray-500">Job Title:</span> {form.jobTitle}</p>
-                  <p><span className="text-gray-500">Experience:</span> {form.experience}</p>
-                  <p><span className="text-gray-500">Education:</span> {form.educationLevel}</p>
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 
-              {/* SALARY INFO */}
-              <div className="bg-[#f5f7fc] p-6 rounded-xl">
-                <h3 className="font-semibold text-lg mb-4">Salary Info</h3>
+              <ProfileCard title="Personal Info">
+                <p>Email: {form.email}</p>
+                <p>Phone: {form.phoneNumber}</p>
+                <p>Age: {form.age}</p>
+              </ProfileCard>
 
-                <div className="space-y-2 text-m">
-                  <p><span className="text-gray-500">Current Salary:</span> {form.currentSalary}</p>
-                  <p><span className="text-gray-500">Expected Salary:</span> {form.expectedSalary}</p>
-                </div>
-              </div>
+              <ProfileCard title="Salary Info">
+                <p>Current Salary: {form.currentSalary}</p>
+                <p>Expected Salary: {form.expectedSalary}</p>
+              </ProfileCard>
 
-              {/* LANGUAGES */}
-              <div className="bg-[#f5f7fc] p-6 rounded-xl">
-                <h3 className="font-semibold text-lg mb-4">Languages</h3>
+              <ProfileCard title="Languages">
 
                 <div className="flex flex-wrap gap-2">
-                  {form.languages.split(",").map((lang, i) => (
-                    <span
-                      key={i}
-                      className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs"
-                    >
-                      {lang}
-                    </span>
-                  ))}
+
+                  {form.languages
+                    .split(",")
+                    .filter((lang) => lang.trim() !== "")
+                    .map((lang, i) => (
+                      <span
+                        key={i}
+                        className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs"
+                      >
+                        {lang}
+                      </span>
+                    ))}
+
                 </div>
-              </div>
+
+              </ProfileCard>
+
+              <ProfileCard title="About Me">
+                <p className="leading-relaxed">
+                  {form.description || "No description added"}
+                </p>
+              </ProfileCard>
 
             </div>
 
-            {/* DESCRIPTION */}
-            <div className="bg-[#f5f7fc] p-6 rounded-xl mt-6">
-              <h3 className="font-semibold text-lg mb-4">About Me</h3>
-              <p className="text-m text-gray-600 leading-relaxed">
-                {form.description || "No description added"}
-              </p>
-            </div>
+            {/* UPDATE BUTTON */}
 
-            {/* BUTTON */}
             <button
               onClick={() => setIsEdit(true)}
-              className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+              className="mt-8 bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700"
             >
-              Edit Profile
+              Update Profile
             </button>
           </>
+
         ) : (
 
+          /* =========================
+              PROFILE FORM
+          ========================== */
 
           <>
+            {/* IMAGE */}
+
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-[200px] h-[120px] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer">
+
+              <div className="w-[200px] h-[120px] border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer bg-[#f5f7fc]">
+
                 <input
                   type="file"
                   className="hidden"
                   id="upload"
                   onChange={(e) => setImage(e.target.files[0])}
                 />
-                <label htmlFor="upload" className="cursor-pointer text-sm text-gray-500">
-                  Upload Image
+
+                <label
+                  htmlFor="upload"
+                  className="cursor-pointer text-sm text-gray-500"
+                >
+                  {image ? image.name : "Upload Image"}
                 </label>
+
               </div>
+
             </div>
+
+            {/* INPUTS */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               <Input label="Full Name" name="name" value={form.name} onChange={handleChange} />
+
               <Input label="Phone" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} />
+
               <Input label="Job Title" name="jobTitle" value={form.jobTitle} onChange={handleChange} />
+
               <Input label="Email" name="email" value={form.email} onChange={handleChange} />
+
               <Input label="Experience" name="experience" value={form.experience} onChange={handleChange} />
+
               <Input label="Education" name="educationLevel" value={form.educationLevel} onChange={handleChange} />
+
               <Input label="Current Salary" name="currentSalary" value={form.currentSalary} onChange={handleChange} />
+
               <Input label="Expected Salary" name="expectedSalary" value={form.expectedSalary} onChange={handleChange} />
+
               <Input label="Age" name="age" value={form.age} onChange={handleChange} />
 
             </div>
 
+            {/* LANGUAGES */}
+
             <div className="mt-6">
-              <label>Languages</label>
+
+              <label className="text-sm text-gray-600">
+                Languages
+              </label>
+
               <input
                 name="languages"
                 value={form.languages}
                 onChange={handleChange}
                 className="w-full mt-2 p-3 bg-[#f5f7fc] rounded-lg"
               />
+
             </div>
 
+            {/* DESCRIPTION */}
+
             <div className="mt-6">
-              <label>Description</label>
+
+              <label className="text-sm text-gray-600">
+                About Me
+              </label>
+
               <textarea
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                className="w-full mt-2 p-3 bg-[#f5f7fc] rounded-lg"
+                className="w-full mt-2 p-3 bg-[#f5f7fc] rounded-lg min-h-[120px]"
               />
+
             </div>
+
+            {/* SAVE BUTTON */}
 
             <button
               onClick={handleSave}
-              className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg"
+              className="mt-8 bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700"
             >
-              Save
+              Save Profile
             </button>
           </>
         )}
@@ -249,16 +350,37 @@ export default function MyProfile() {
   );
 }
 
+function ProfileCard({ title, children }) {
+  return (
+    <div className="bg-[#f5f7fc] p-6 rounded-2xl">
+
+      <h3 className="font-semibold text-lg mb-4">
+        {title}
+      </h3>
+
+      <div className="space-y-3 text-gray-700">
+        {children}
+      </div>
+
+    </div>
+  );
+}
+
 function Input({ label, name, value, onChange }) {
   return (
     <div>
-      <label className="text-sm text-gray-600">{label}</label>
+
+      <label className="text-sm text-gray-600">
+        {label}
+      </label>
+
       <input
         name={name}
         value={value}
         onChange={onChange}
         className="w-full mt-2 p-3 bg-[#f5f7fc] rounded-lg"
       />
+
     </div>
   );
 }

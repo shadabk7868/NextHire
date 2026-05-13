@@ -8,6 +8,7 @@ const {
    getAppliedJobs,
    getMyJobs,
    updateJob,
+   getMyJobsApplicants,
    deleteJob
 } = require("../controllers/jobController");
 
@@ -26,6 +27,7 @@ router.get("/applied-jobs", auth, getAppliedJobs);
 router.get("/my-jobs", auth, getMyJobs);
 
 router.put("/update-job/:jobId", auth, isEmployer, updateJob);
+router.get("/my-jobs-applicants",auth,getMyJobsApplicants);
 
 router.delete("/delete-job/:jobId", auth, isEmployer, deleteJob);
 

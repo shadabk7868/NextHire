@@ -147,7 +147,7 @@ export default function Home() {
 
             <div
               key={i}
-              className="rounded-2xl p-6 flex items-center gap-4 bg-white hover:shadow-md transition"
+              className="rounded-2xl p-6 flex items-center gap-4 bg-white hover:shadow-md transition cursor-pointer"
             >
 
               <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-blue-600 text-xl flex-shrink-0">
@@ -189,7 +189,7 @@ export default function Home() {
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
             <div
               key={i}
-              className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start hover:shadow-lg transition-all bg-white overflow-hidden"
+              className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start hover:shadow-lg transition-all bg-white overflow-hidden cursor-pointer"
             >
 
               <img
@@ -277,7 +277,7 @@ export default function Home() {
 
             <SwiperSlide key={index} className="h-auto">
 
-              <div className="bg-white rounded-2xl shadow-md p-6 h-full min-h-[320px] flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-2xl shadow-md p-6 h-full min-h-[320px] flex flex-col justify-between hover:shadow-xl transition-all duration-300 cursor-grab active:cursor-grabbing">
 
                 <div>
 

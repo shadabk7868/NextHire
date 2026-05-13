@@ -1,21 +1,15 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import AuthModal from "./AuthModal";
 
 export default function Navbar() {
   const [showAuth, setShowAuth] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false); 
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userRole = localStorage.getItem("role");
-
-    setIsLoggedIn(!!token);
-    setRole(userRole);
-  }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token")
+  );
+  const [role] = useState(localStorage.getItem("role"));
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -23,45 +17,70 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
+  const linkClass = ({ isActive }) =>
+    `text-black hover:text-blue-600 ${
+      isActive ? "text-blue-600 font-semibold" : ""
+    }`;
+
   return (
     <>
       <header className="bg-white sticky top-0 z-50 shadow-sm">
         <div className="px-4 sm:px-6 lg:px-[80px] flex justify-between items-center h-[70px]">
 
           {/* LOGO */}
-          <Link to="/">
+          <NavLink to="/">
             <img src="/real logo.jpeg" alt="logo" className="h-16 md:h-17" />
-          </Link>
+          </NavLink>
 
           {/* DESKTOP MENU */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-700">
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
 
-            <Link to="/">Home</Link>
-            <Link to="/jobs">Find Jobs</Link>
-            <Link to="/blog">Blog</Link>
-            <Link to="/contact">Contact</Link>
+            <NavLink to="/" className={linkClass}>
+              Home
+            </NavLink>
 
-            {/* DASHBOARD */}
-            {isLoggedIn && role === "candidate" && (
-              <Link to="/candidate-dashboard" className="text-blue-600 font-semibold">
-                Dashboard
-              </Link>
+            {(!isLoggedIn || role === "candidate") && (
+              <NavLink to="/jobs" className={linkClass}>
+                Find Jobs
+              </NavLink>
             )}
 
+            {/* BLOG ADDED */}
+            <NavLink to="/blog" className={linkClass}>
+              Blog
+            </NavLink>
+
             {isLoggedIn && role === "employer" && (
-              <Link to="/employers-dashboard" className="text-blue-600 font-semibold">
+              <NavLink to="/employers-dashboard" className={linkClass}>
+                Applicants
+              </NavLink>
+            )}
+
+            <NavLink to="/contact" className={linkClass}>
+              Contact
+            </NavLink>
+
+            {isLoggedIn && (
+              <NavLink
+                to={
+                  role === "candidate"
+                    ? "/candidate-dashboard"
+                    : "/employers-dashboard"
+                }
+                className={linkClass}
+              >
                 Dashboard
-              </Link>
+              </NavLink>
             )}
           </nav>
 
-          {/* RIGHT DESKTOP */}
+          {/* RIGHT SIDE */}
           <div className="hidden lg:flex items-center gap-4">
 
             {!isLoggedIn ? (
               <button
                 onClick={() => setShowAuth(true)}
-                className="text-sm text-gray-700 hover:text-blue-600"
+                className="text-sm text-black hover:text-blue-600"
               >
                 Login / Register
               </button>
@@ -74,17 +93,16 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* EMPLOYER */}
             {isLoggedIn && role === "employer" && (
-              <Link to="/employers-dashboard">
+              <NavLink to="/employers-dashboard">
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                   Post Job
                 </button>
-              </Link>
+              </NavLink>
             )}
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MOBILE BUTTON */}
           <button
             onClick={() => setMenuOpen(true)}
             className="lg:hidden text-xl"
@@ -93,39 +111,58 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* MOBILE MENU */}
         {menuOpen && (
           <div className="fixed inset-0 bg-black/40 z-50">
-            <div className="bg-white w-[260px] h-full p-6 shadow-lg">
+            <div className="bg-white w-[260px] h-full p-6">
 
-              {/* CLOSE */}
               <div className="flex justify-end mb-6">
                 <button onClick={() => setMenuOpen(false)}>
-                  <FaTimes size={20} />
+                  <FaTimes />
                 </button>
               </div>
 
-              {/* MENU ITEMS */}
-              <nav className="flex flex-col gap-5 text-gray-700 font-medium">
+              <nav className="flex flex-col gap-5 text-sm font-medium">
 
-                <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-                <Link to="/jobs" onClick={() => setMenuOpen(false)}>Find Jobs</Link>
-                <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
-                <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+                <NavLink to="/" onClick={() => setMenuOpen(false)} className={linkClass}>
+                  Home
+                </NavLink>
 
-                {/* DASHBOARD */}
-                {isLoggedIn && role === "candidate" && (
-                  <Link to="/candidate-dashboard" onClick={() => setMenuOpen(false)}>
-                    Dashboard
-                  </Link>
+                {(!isLoggedIn || role === "candidate") && (
+                  <NavLink to="/jobs" onClick={() => setMenuOpen(false)} className={linkClass}>
+                    Find Jobs
+                  </NavLink>
                 )}
+
+                {/* BLOG ADDED */}
+                <NavLink to="/blog" onClick={() => setMenuOpen(false)} className={linkClass}>
+                  Blog
+                </NavLink>
 
                 {isLoggedIn && role === "employer" && (
-                  <Link to="/employers-dashboard" onClick={() => setMenuOpen(false)}>
-                    Dashboard
-                  </Link>
+                  <NavLink to="/employers-dashboard" onClick={() => setMenuOpen(false)} className={linkClass}>
+                    Applicants
+                  </NavLink>
                 )}
 
-                {/* LOGIN / LOGOUT */}
+                <NavLink to="/contact" onClick={() => setMenuOpen(false)} className={linkClass}>
+                  Contact
+                </NavLink>
+
+                {isLoggedIn && (
+                  <NavLink
+                    to={
+                      role === "candidate"
+                        ? "/candidate-dashboard"
+                        : "/employers-dashboard"
+                    }
+                    onClick={() => setMenuOpen(false)}
+                    className={linkClass}
+                  >
+                    Dashboard
+                  </NavLink>
+                )}
+
                 {!isLoggedIn ? (
                   <button
                     onClick={() => {
@@ -145,13 +182,15 @@ export default function Navbar() {
                   </button>
                 )}
 
-                {/* EMPLOYER BUTTON */}
                 {isLoggedIn && role === "employer" && (
-                  <Link to="/employers-dashboard" onClick={() => setMenuOpen(false)}>
+                  <NavLink
+                    to="/employers-dashboard"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm w-full">
                       Post Job
                     </button>
-                  </Link>
+                  </NavLink>
                 )}
               </nav>
             </div>
@@ -159,7 +198,6 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* AUTH MODAL */}
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </>
   );
