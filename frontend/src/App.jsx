@@ -10,7 +10,7 @@ import Candidate from "./pages/Candidate";
 import CandidateDetails from "./pages/CandidateDetails";
 import ProfileView from "./pages/ProfileView";
 import Blog from "./pages/Blog";
-import BlogDetail from './pages/BlogDeatail'
+import BlogDetail from './pages/BlogDetail'
 import Contact from "./pages/Contact";
 import AuthModal from "./components/AuthModal";
  import AppliedJobs from "./pages/AppliedJobs";

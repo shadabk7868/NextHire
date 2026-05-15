@@ -17,7 +17,8 @@ import {
   FaBars,
 } from "react-icons/fa";
 
-function DashboardHome() {
+function DashboardHome({ setActiveTab }) {
+
 
   const [stats, setStats] = useState({
     appliedJobs: 0,
@@ -36,7 +37,7 @@ function DashboardHome() {
         if (!token) return;
 
         const appliedRes = await axios.get(
-          "https://nexthire-i1hx.onrender.com/api/user/applied-jobs",
+          "https://nexthire-i1hx.onrender.com/api/job/applied-jobs",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -55,11 +56,18 @@ function DashboardHome() {
 
         const user = profileRes.data?.data;
 
+        const appliedJobs = appliedRes.data?.data || [];
+
+        const validAppliedJobs = appliedJobs.filter(
+          (item) =>
+            item?.appliedJobId &&
+            item?.appliedJobId?._id // ensure job exists
+        );
+
         setStats({
-          appliedJobs: appliedRes.data?.data?.length || 0,
+          appliedJobs: validAppliedJobs.length,
           hasResume: !!user?.resume?.url,
-          profileComplete:
-            !!user?.name && !!user?.phoneNumber,
+          profileComplete: !!user?.name && !!user?.phoneNumber,
         });
 
       } catch (err) {
@@ -84,7 +92,10 @@ function DashboardHome() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {/* APPLIED JOBS */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
+        <div
+          onClick={() => setActiveTab("appliedJobs")}
+          className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition cursor-pointer"
+        >
 
           <div>
 
@@ -105,14 +116,17 @@ function DashboardHome() {
         </div>
 
         {/* PROFILE STATUS */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
+        <div
+          onClick={() => setActiveTab("profile")}
+          className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition cursor-pointer"
+        >
 
           <div>
 
             <h2
               className={`text-2xl md:text-3xl font-bold ${stats.profileComplete
-                  ? "text-green-600"
-                  : "text-yellow-500"
+                ? "text-green-600"
+                : "text-yellow-500"
                 }`}
             >
               {stats.profileComplete
@@ -133,14 +147,17 @@ function DashboardHome() {
         </div>
 
         {/* RESUME */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
+        <div
+          onClick={() => setActiveTab("resume")}
+          className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition cursor-pointer"
+        >
 
           <div>
 
             <h2
               className={`text-2xl md:text-3xl font-bold ${stats.hasResume
-                  ? "text-green-600"
-                  : "text-red-500"
+                ? "text-green-600"
+                : "text-red-500"
                 }`}
             >
               {stats.hasResume
@@ -204,13 +221,13 @@ export default function CandidateDashboard() {
       </div>
 
       {/* MAIN */}
-      <div className="flex pt-[80px]">
+      <div className="flex pt-[80px] h-screen overflow-hidden">
 
         {/* SIDEBAR */}
         <div
           className={`bg-white min-h-screen fixed lg:static top-[80px] left-0 z-40 w-[270px] px-6 py-8 transition-all duration-300 shadow-md lg:shadow-none
           
-          ${sidebarOpen
+${sidebarOpen
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0"
             }`}
@@ -279,19 +296,21 @@ export default function CandidateDashboard() {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px]">
+        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px] overflow-y-auto h-full">
 
           {/* MOBILE HAMBURGER */}
-<div className="lg:hidden fixed top-[90px] left-4 z-50">
-  <button
-    onClick={() => setSidebarOpen(!sidebarOpen)}
-    className="bg-white p-3 rounded-xl shadow-md text-xl"
-  >
-    <FaBars />
-  </button>
-</div>
+          <div className="lg:hidden fixed top-[90px] left-4 z-50">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="bg-white p-3 rounded-xl shadow-md text-xl"
+            >
+              <FaBars />
+            </button>
+          </div>
 
-          {activeTab === "dashboard" && <DashboardHome />}
+          {activeTab === "dashboard" && (
+            <DashboardHome setActiveTab={setActiveTab} />
+          )}
           {activeTab === "profile" && <MyProfile />}
           {activeTab === "resume" && <MyResume />}
           {activeTab === "appliedJobs" && <AppliedJobs />}

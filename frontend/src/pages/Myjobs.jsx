@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
 
-export default function MyJobs() {
+export default function MyJobs({
+  setActiveTab,
+  setEditJobId,
+  setSelectedApplicantsJobId,
+}) {
+
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
-
   const getMyJobs = async () => {
+
     try {
+
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -24,46 +28,70 @@ export default function MyJobs() {
       });
 
       setJobs(res.data.data || []);
+
     } catch (err) {
+
       console.log(err);
 
       const message =
-        err?.response?.data?.message || "Error fetching jobs";
+        err?.response?.data?.message ||
+        "Error fetching jobs";
 
       alert(message);
+
     } finally {
       setLoading(false);
     }
   };
 
+  // DELETE JOB
   const deleteJob = async (jobId) => {
+
     try {
+
       const token = localStorage.getItem("token");
 
-      const res = await API.delete(`/job/delete-job/${jobId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await API.delete(
+        `/job/delete-job/${jobId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       alert(res.data.message);
 
       setJobs((prev) =>
         prev.filter((job) => job._id !== jobId)
       );
+
     } catch (err) {
+
       console.log(err);
 
       const message =
-        err?.response?.data?.message || "Error deleting job";
+        err?.response?.data?.message ||
+        "Error deleting job";
 
       alert(message);
     }
   };
 
-  // EDIT NAVIGATION
+  // EDIT JOB
   const editJob = (jobId) => {
-    navigate(`/edit-job/${jobId}`);
+
+    setEditJobId(jobId);
+
+    setActiveTab("editjob");
+  };
+
+  // OPEN APPLICANTS PAGE
+  const openApplicants = (jobId) => {
+
+    setSelectedApplicantsJobId(jobId);
+
+    setActiveTab("appliedCandidates");
   };
 
   useEffect(() => {
@@ -78,19 +106,27 @@ export default function MyJobs() {
       </h2>
 
       {loading ? (
+
         <p className="text-center text-gray-500">
           Loading...
         </p>
+
       ) : jobs.length === 0 ? (
+
         <div className="bg-white p-10 rounded-xl shadow-sm text-center">
+
           <p className="text-gray-500 text-lg">
             You haven't posted any jobs yet
           </p>
+
         </div>
+
       ) : (
+
         <div className="space-y-5">
 
           {jobs.map((job) => (
+
             <div
               key={job._id}
               className="bg-white p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between gap-5"
@@ -123,6 +159,7 @@ export default function MyJobs() {
 
                 </div>
 
+                {/* TAGS */}
                 <div className="flex flex-wrap gap-2 mt-3">
 
                   {job?.industryType && (
@@ -137,24 +174,46 @@ export default function MyJobs() {
                     </span>
                   )}
 
-                  <span
-                    onClick={() => navigate(
-                      `/employers-dashboard?tab=appliedCandidates&jobId=${encodeURIComponent(job._id)}`
-                    )}
-                    className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs cursor-pointer hover:bg-purple-200"
-                  >
-                    Applicants: {job?.applicants?.length || 0}
-                  </span>
+                  {/* APPLICANTS BUTTON */}
+<span
+  onClick={() => openApplicants(job._id)}
+  className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs cursor-pointer hover:bg-purple-200"
+>
+  Applicants: {
+
+    [
+      ...new Set(
+        (job?.applicants || []).map((item) => {
+
+          if (typeof item === "object") {
+            return (
+              item?._id?.toString() ||
+              item?.email
+            );
+          }
+
+          return item?.toString();
+
+        })
+      ),
+    ].filter(Boolean).length
+
+  }
+</span>
 
                 </div>
 
                 <p className="text-xs text-gray-400 mt-4">
+
                   Posted{" "}
+
                   {Math.floor(
                     (new Date() - new Date(job.createdAt)) /
                     (1000 * 60 * 60 * 24)
                   )}{" "}
+
                   days ago
+
                 </p>
 
               </div>
@@ -162,6 +221,7 @@ export default function MyJobs() {
               {/* RIGHT */}
               <div className="flex flex-row md:flex-col gap-3 justify-center">
 
+                {/* EDIT BUTTON */}
                 <button
                   onClick={() => editJob(job._id)}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
@@ -169,6 +229,7 @@ export default function MyJobs() {
                   Edit
                 </button>
 
+                {/* DELETE BUTTON */}
                 <button
                   onClick={() => deleteJob(job._id)}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm"

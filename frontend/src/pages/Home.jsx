@@ -1,13 +1,26 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import API from "../utils/api";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { FaMoneyBillWave, FaBullhorn, FaPaintBrush, FaCode, FaUserTie, FaCar, FaHeadset, FaBriefcaseMedical, FaProjectDiagram } from "react-icons/fa";
 
 export default function Home() {
+
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+  const [location, setLocation] = useState("");
+  const [featuredJobs, setFeaturedJobs] = useState([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+
+  const role = localStorage.getItem("role");
+
   const images = [
     "1-1.webp",
     "1-2.webp",
@@ -59,6 +72,45 @@ export default function Home() {
     },
   ];
 
+  useEffect(() => {
+
+    const fetchJobs = async () => {
+
+      try {
+
+        const res = await API.get("/job/getjob");
+
+        setFeaturedJobs(res.data.data?.slice(0, 10) || []);
+
+      } catch (err) {
+
+        console.log(err);
+
+      } finally {
+
+        setLoadingJobs(false);
+
+      }
+    };
+
+    fetchJobs();
+
+  }, []);
+
+  const handleSearch = () => {
+
+    const params = new URLSearchParams();
+
+    if (search.trim()) {
+      params.append("search", search);
+    }
+
+    if (location.trim()) {
+      params.append("location", location);
+    }
+
+    navigate(`/jobs?${params.toString()}`);
+  };
   return (
     <div className="bg-[#f5f7fc] min-h-screen overflow-x-hidden">
       <Navbar />
@@ -87,32 +139,44 @@ export default function Home() {
               Find Jobs, Employment & Career Opportunities
             </p>
 
-            {/* SEARCH BAR */}
-            <div className="w-full max-w-[730px] bg-white shadow-xl rounded-lg flex flex-col md:flex-row items-stretch md:items-center overflow-hidden p-2 gap-2 md:gap-0">
+            {role !== "employer" && (
+              <>
+                {/* SEARCH BAR */}
+                <div className="w-full max-w-[730px] bg-white shadow-xl rounded-lg flex flex-col md:flex-row items-stretch md:items-center overflow-hidden p-2 gap-2 md:gap-0">
 
-              <input
-                placeholder="Job title, keywords, or company"
-                className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none md:border-r"
-              />
+                  <input
+                    type="text"
+                    placeholder="Job title, keywords, or company"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none md:border-r"
+                  />
 
-              <input
-                placeholder="City or postcode"
-                className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none"
-              />
+                  <input
+                    type="text"
+                    placeholder="Location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full md:flex-1 h-[50px] px-5 text-[14px] outline-none"
+                  />
 
-              <Link
-                to="/jobs"
-                className="bg-blue-600 text-white px-8 h-[50px] text-[14px] font-medium rounded-md hover:bg-blue-700 transition w-full md:w-auto flex items-center justify-center whitespace-nowrap"
-              >
-                Find Jobs
-              </Link>
+                  <button
+                    onClick={handleSearch}
+                    className="bg-blue-600 text-white px-8 h-[50px] text-[14px] font-medium rounded-md hover:bg-blue-700 transition w-full md:w-auto flex items-center justify-center whitespace-nowrap"
+                  >
+                    Find Jobs
+                  </button>
 
-            </div>
+                </div>
 
-            <p className="text-[13px] text-gray-200 mt-4">
-              <span className="font-medium text-white">Popular Searches :</span>{" "}
-              Designer, Developer, Web, IOS, PHP, Senior, Engineer
-            </p>
+                <p className="text-[13px] text-gray-200 mt-4">
+                  <span className="font-medium text-white">
+                    Popular Searches :
+                  </span>{" "}
+                  Designer, Developer, Web, IOS, PHP, Senior, Engineer
+                </p>
+              </>
+            )}
           </div>
 
         </div>
@@ -127,7 +191,7 @@ export default function Home() {
           </h2>
 
           <p className="text-gray-500 mt-2 text-sm">
-            2020 jobs live - 293 added today.
+            2026 jobs live - 293 added today.
           </p>
         </div>
 
@@ -173,6 +237,7 @@ export default function Home() {
 
       {/* FEATURED JOBS */}
       <div className="lg:px-[90px] px-6 py-16 bg-white">
+
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold">
             Featured Jobs
@@ -181,58 +246,112 @@ export default function Home() {
           <p className="text-gray-500 mt-2">
             Know your worth and find the job that qualify your life
           </p>
-
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {loadingJobs ? (
 
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
-            <div
-              key={i}
-              className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start hover:shadow-lg transition-all bg-white overflow-hidden cursor-pointer"
-            >
+          <p className="text-center text-gray-500">
+            Loading jobs...
+          </p>
 
-              <img
-                src={images[i]}
-                alt="company logo"
-                className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
-              />
+        ) : featuredJobs.length === 0 ? (
 
-              <div className="flex-1 w-full">
+          <p className="text-center text-gray-500">
+            No jobs available
+          </p>
 
-                <h3 className="font-semibold text-base sm:text-lg break-words">
-                  Software Engineer (Android), Libraries
-                </h3>
+        ) : (
 
-                <div className="flex flex-wrap gap-4 text-gray-500 text-sm mt-2">
-                  <span>Segment</span>
-                  <span>London, UK</span>
-                  <span>11 hours ago</span>
-                  <span>$35k - $45k</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {featuredJobs.map((job, i) => (
+              <Link
+  to={`/job/${job._id}`}
+  key={job._id}
+  className="block"
+>
+                <div
+                  className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start bg-gray-100 overflow-hidden"
+                >
+
+                  <img
+                    src={images[i % images.length]}
+                    alt="company logo"
+                    className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+                  />
+
+                  <div className="flex-1 w-full">
+
+                    <h3 className="font-semibold text-base sm:text-lg break-words">
+                      {job.title}
+                    </h3>
+
+                    <div className="flex flex-wrap gap-4 text-gray-500 text-sm mt-2">
+
+                      <span>
+                        {job?.companyName || "Company"}
+                      </span>
+
+                      <span>
+                        {job?.address?.city || "Location"}
+                      </span>
+
+                      <span>
+                        ₹ {job?.offeredSalary || "Not disclosed"}
+                      </span>
+
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mt-4">
+
+                      {job?.jobType && (
+                        <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs">
+                          {job.jobType}
+                        </span>
+                      )}
+
+                      {job?.careerLevel && (
+                        <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
+                          {job.careerLevel}
+                        </span>
+                      )}
+
+                      {job?.industryType && (
+                        <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-xs">
+                          {job.industryType}
+                        </span>
+                      )}
+
+                    </div>
+
+                    <p className="text-xs text-gray-400 mt-4">
+
+                      {(() => {
+
+                        const days = Math.floor(
+                          (new Date() - new Date(job.createdAt)) /
+                          (1000 * 60 * 60 * 24)
+                        );
+
+                        return days === 0
+                          ? "Posted Today"
+                          : `Posted ${days} days ago`;
+
+                      })()}
+
+                    </p>
+
+                  </div>
+
                 </div>
+              </Link>
 
-                <div className="flex flex-wrap gap-2 mt-4">
+            ))}
 
-                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs">
-                    Full Time
-                  </span>
+          </div>
 
-                  <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
-                    Private
-                  </span>
+        )}
 
-                  <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-xs">
-                    Urgent
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          ))}
-        </div>
       </div>
 
       {/* TESTIMONIALS SECTION */}
@@ -359,7 +478,7 @@ export default function Home() {
               className="h-8 object-contain"
             />
 
-         </div>
+          </div>
         </div>
       </div>
 

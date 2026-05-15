@@ -82,12 +82,13 @@ export default function BlogDetail() {
       <Navbar />
 
       {/* HEADER IMAGE */}
-      <div className="w-full h-[300px]">
-        <img
-          src={blog.image}
-          className="w-full h-full object-cover"
-        />
-      </div>
+<div className="w-full h-[220px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+  <img
+    src={blog.image}
+    alt={blog.title}
+    className="w-full h-full object-cover"
+  />
+</div>
 
       {/* CONTENT */}
       <div className="lg:px-[120px] md:px-10 px-6 py-10 bg-white">

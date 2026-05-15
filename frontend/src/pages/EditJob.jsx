@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../utils/api";
 
-export default function EditJob() {
-
-  const { id } = useParams();
+export default function EditJob({ jobId, setActiveTab }) {
 
   const navigate = useNavigate();
 
@@ -34,7 +32,7 @@ export default function EditJob() {
       const res = await API.get("/job/getjob");
 
       const foundJob = res.data.data.find(
-        (job) => job._id === id
+        (job) => job._id === jobId
       );
 
       if (!foundJob) {
@@ -71,7 +69,7 @@ export default function EditJob() {
       const token = localStorage.getItem("token");
 
       const res = await API.put(
-        `/job/update-job/${id}`,
+        `/job/update-job/${jobId}`,
         {
           title: form.title,
           description: form.description,
@@ -93,7 +91,7 @@ export default function EditJob() {
 
       alert(res.data.message);
 
-      navigate("/employers-dashboard");
+      setActiveTab("myjobs");
 
     } catch (err) {
       console.log(err);

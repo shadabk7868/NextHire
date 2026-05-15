@@ -102,7 +102,7 @@ let updatePersonalInfo = AsyncHandler(async (req, res) => {
   languages,
   skills,
   education,
-  keywords,
+  description,
   workExperience,
 } = req.body;
   let file = req.file
@@ -138,7 +138,7 @@ let updatePersonalInfo = AsyncHandler(async (req, res) => {
     languages,
     skills,
     education,
-    keywords,
+    description,
     workExperience,
     profileImage
   },

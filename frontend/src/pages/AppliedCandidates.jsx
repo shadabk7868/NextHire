@@ -53,15 +53,21 @@ export default function AppliedCandidates({ jobId }) {
   setSelectedJob(jobToSelect);
 }, [jobs, jobId]);
 
-  // REMOVE DUPLICATES (same user multiple apply fix)
   const uniqueApplicants = [
-    ...new Map(
-      (selectedJob?.applicants || []).map((item) => [
-        item._id,
-        item,
-      ])
-    ).values(),
-  ];
+  ...new Map(
+    (selectedJob?.applicants || []).map((item) => {
+
+      const key =
+        item?._id?.toString() ||
+        item?.email;
+
+      return [key, item];
+
+    })
+  ).values(),
+];
+
+const applicantsCount = uniqueApplicants.length;
 
   // SAFE IMAGE HANDLER (no backend change needed)
   const getImage = (img) => {
@@ -121,8 +127,25 @@ export default function AppliedCandidates({ jobId }) {
                   </h3>
 
                   <p className="text-xs text-gray-500 mt-1">
-                    {job.applicants?.length || 0} Applicants
-                  </p>
+  {
+    [
+      ...new Set(
+        (job?.applicants || []).map((item) => {
+
+          if (typeof item === "object") {
+            return (
+              item?._id?.toString() ||
+              item?.email
+            );
+          }
+
+          return item?.toString();
+
+        })
+      ),
+    ].filter(Boolean).length
+  } Applicants
+</p>
                 </div>
               ))}
 
@@ -138,8 +161,8 @@ export default function AppliedCandidates({ jobId }) {
               </h2>
 
               <p className="text-gray-500 text-sm mt-1">
-                {uniqueApplicants.length} Applicants
-              </p>
+  {applicantsCount} Applicants
+</p>
             </div>
 
             {!selectedJob || selectedJob?.applicants?.length === 0 ? (  

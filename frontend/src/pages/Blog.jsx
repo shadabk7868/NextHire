@@ -77,12 +77,14 @@ export default function Blog() {
               <div key={blog.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
 
                 {/* IMAGE (FIXED SIZE SPACE) */}
-                <div className="w-full h-[220px] bg-gray-200">
+                <div className="cursor-default w-full h-[220px] bg-gray-200">
+                  <Link to={`/blog/${blog.id}`}>
                   <img
                     src={blog.image}
                     alt=""
                     className="w-full h-full object-cover"
                   />
+                  </Link>
                 </div>
 
                 {/* CONTENT */}
@@ -110,49 +112,7 @@ export default function Blog() {
               </div>
             ))}
 
-          </div>
-
-          {/* SIDEBAR */}
-          <div className="w-full lg:w-[350px] bg-white p-6 rounded-xl shadow-sm h-fit">
-
-            {/* SEARCH */}
-            <div>
-              <h3 className="font-semibold text-m mb-3">Search by Keywords</h3>
-              <div className="flex items-center bg-gray-100 rounded-lg px-3 h-[50px]">
-                <FaSearch className="text-gray-400 mr-2" />
-                <input
-                  className="bg-transparent outline-none w-full text-sm"
-                  placeholder="keywords"
-                />
-              </div>
-            </div>
-
-            {/* CATEGORIES */}
-            <div className="mt-8">
-              <h3 className="font-semibold text-m mb-3">Categories</h3>
-              <ul className="space-y-3 text-m text-gray-600">
-                {["Education", "Information", "Interview", "Job Seeking", "Jobs", "Learn", "Skill", "Travel"].map((cat, i) => (
-                  <li key={i} className="hover:text-blue-600 cursor-pointer">
-                    • {cat}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* TAGS */}
-            <div className="mt-8">
-              <h3 className="font-semibold mb-3">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {["App", "Administrative", "Android", "Wordpress", "Design", "React"].map((tag, i) => (
-                  <span key={i} className="bg-gray-100 px-3 py-1 rounded text-sm">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-          </div>
-
+          </div>  
         </div>
       </div>
 

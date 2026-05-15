@@ -14,19 +14,25 @@ import Navbar from "../components/Navbar";
 import AppliedCandidates from "./AppliedCandidates";
 import CompanyProfile from "../pages/CompanyProfile";
 import PostJob from "../pages/PostJob";
+import EditJob from "./EditJob";
 import MyJobs from "./Myjobs";
 import { useNavigate } from "react-router-dom";
 
-function DashboardHome() {
+function DashboardHome({ setActiveTab }) {
+
   const [stats, setStats] = useState({
     postedJobs: 0,
     totalApplicants: 0,
   });
 
   useEffect(() => {
+
     const fetchData = async () => {
+
       try {
+
         const token = localStorage.getItem("token");
+
         if (!token) return;
 
         const res = await axios.get(
@@ -40,9 +46,27 @@ function DashboardHome() {
 
         const jobs = res.data?.data || [];
 
-        // TOTAL APPLICANTS CALCULATION
+        const getUniqueApplicantsCount = (applicants = []) => {
+          return [
+            ...new Set(
+              applicants.map((item) => {
+
+                if (typeof item === "object") {
+                  return (
+                    item?._id?.toString() ||
+                    item?.email
+                  );
+                }
+
+                return item?.toString();
+
+              })
+            ),
+          ].filter(Boolean).length;
+        };
+
         const totalApplicants = jobs.reduce((acc, job) => {
-          return acc + (job?.applicants?.length || 0);
+          return acc + getUniqueApplicantsCount(job?.applicants || []);
         }, 0);
 
         setStats({
@@ -56,6 +80,7 @@ function DashboardHome() {
     };
 
     fetchData();
+
   }, []);
 
   return (
@@ -71,9 +96,13 @@ function DashboardHome() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* POSTED JOBS */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
+        <div
+          onClick={() => setActiveTab("myjobs")}
+          className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition cursor-pointer hover:scale-[1.02]"
+        >
 
           <div>
+
             <h2 className="text-3xl md:text-4xl font-bold text-blue-600">
               {stats.postedJobs}
             </h2>
@@ -81,6 +110,7 @@ function DashboardHome() {
             <p className="text-gray-500 text-sm mt-1">
               Posted Jobs
             </p>
+
           </div>
 
           <div className="bg-blue-100 p-4 rounded-xl text-blue-600 text-2xl">
@@ -90,9 +120,13 @@ function DashboardHome() {
         </div>
 
         {/* TOTAL APPLICANTS */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition">
+        <div
+          onClick={() => setActiveTab("appliedCandidates")}
+          className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between hover:shadow-md transition cursor-pointer hover:scale-[1.02]"
+        >
 
           <div>
+
             <h2 className="text-3xl md:text-4xl font-bold text-green-600">
               {stats.totalApplicants}
             </h2>
@@ -100,6 +134,7 @@ function DashboardHome() {
             <p className="text-gray-500 text-sm mt-1">
               Total Applicants
             </p>
+
           </div>
 
           <div className="bg-green-100 p-4 rounded-xl text-green-600 text-2xl">
@@ -127,6 +162,8 @@ export default function EmployerDashboard() {
 
   const selectedJobId = searchParams.get("jobId");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editJobId, setEditJobId] = useState(null);
+  const [selectedApplicantsJobId, setSelectedApplicantsJobId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -159,17 +196,18 @@ export default function EmployerDashboard() {
       </div>
 
       {/* MAIN */}
-      <div className="flex pt-[80px]">
+      <div className="flex pt-[80px] h-screen overflow-hidden">
 
         {/* SIDEBAR */}
         <div
-          className={`bg-white min-h-screen fixed lg:static top-[80px] left-0 z-40 w-[270px] px-6 py-8 transition-all duration-300 shadow-md lg:shadow-none
+          className={`bg-white h-[calc(100vh-80px)] fixed lg:sticky top-[80px] left-0 z-40 w-[270px] px-6 py-8 transition-all duration-300 shadow-md lg:shadow-none overflow-y-auto
           
-          ${sidebarOpen
+${sidebarOpen
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0"
             }`}
         >
+
 
           <div className="flex flex-col gap-3 text-[15px] pt-10">
 
@@ -234,7 +272,7 @@ export default function EmployerDashboard() {
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px]">
+        <div className="flex-1 w-full lg:ml-0 px-4 sm:px-6 md:px-8 lg:px-10 pt-[80px] overflow-y-auto h-full">
 
           {/* MOBILE HAMBURGER */}
           <div className="lg:hidden fixed top-[90px] left-4 z-50">
@@ -247,11 +285,25 @@ export default function EmployerDashboard() {
           </div>
 
 
-          {activeTab === "dashboard" && <DashboardHome />}
+          {activeTab === "dashboard" && (
+            <DashboardHome setActiveTab={setActiveTab} />
+          )}
           {activeTab === "post" && <PostJob />}
           {activeTab === "profile" && <CompanyProfile />}
-          {activeTab === "myjobs" && <MyJobs />}
-          {activeTab === "appliedCandidates" && (<AppliedCandidates jobId={selectedJobId} />)}
+          {activeTab === "myjobs" && (
+            <MyJobs
+              setActiveTab={setActiveTab}
+              setEditJobId={setEditJobId}
+              setSelectedApplicantsJobId={setSelectedApplicantsJobId}
+            />
+          )}
+          {activeTab === "editjob" && (
+            <EditJob
+              jobId={editJobId}
+              setActiveTab={setActiveTab}
+            />
+          )}
+          {activeTab === "appliedCandidates" && (<AppliedCandidates jobId={selectedApplicantsJobId} />)}
 
         </div>
 

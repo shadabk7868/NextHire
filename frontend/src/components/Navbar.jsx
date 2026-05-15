@@ -18,8 +18,7 @@ export default function Navbar() {
   };
 
   const linkClass = ({ isActive }) =>
-    `text-black hover:text-blue-600 ${
-      isActive ? "text-blue-600 font-semibold" : ""
+    `text-black hover:text-blue-600 ${isActive ? "text-blue-600 font-semibold" : ""
     }`;
 
   return (
@@ -45,16 +44,21 @@ export default function Navbar() {
               </NavLink>
             )}
 
+            {isLoggedIn && role === "employer" && (
+              <NavLink
+                to="/employers-dashboard?tab=appliedCandidates"
+                className={linkClass}
+              >
+                Applicants
+              </NavLink>
+            )}
+
             {/* BLOG ADDED */}
             <NavLink to="/blog" className={linkClass}>
               Blog
             </NavLink>
 
-            {isLoggedIn && role === "employer" && (
-              <NavLink to="/employers-dashboard" className={linkClass}>
-                Applicants
-              </NavLink>
-            )}
+
 
             <NavLink to="/contact" className={linkClass}>
               Contact
@@ -94,7 +98,7 @@ export default function Navbar() {
             )}
 
             {isLoggedIn && role === "employer" && (
-              <NavLink to="/employers-dashboard">
+              <NavLink to="/employers-dashboard?tab=post">
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
                   Post Job
                 </button>
@@ -140,7 +144,11 @@ export default function Navbar() {
                 </NavLink>
 
                 {isLoggedIn && role === "employer" && (
-                  <NavLink to="/employers-dashboard" onClick={() => setMenuOpen(false)} className={linkClass}>
+                  <NavLink
+                    to="/employers-dashboard?tab=appliedCandidates"
+                    onClick={() => setMenuOpen(false)}
+                    className={linkClass}
+                  >
                     Applicants
                   </NavLink>
                 )}
@@ -184,7 +192,7 @@ export default function Navbar() {
 
                 {isLoggedIn && role === "employer" && (
                   <NavLink
-                    to="/employers-dashboard"
+                    to="/employers-dashboard?tab=post"
                     onClick={() => setMenuOpen(false)}
                   >
                     <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm w-full">

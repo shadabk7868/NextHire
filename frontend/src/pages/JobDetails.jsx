@@ -180,7 +180,7 @@ export default function JobDetails() {
                         )}
 
                         {/* SAVE BUTTON (candidate only) */}
-                        {role === "candidate" && (
+                        {/* {role === "candidate" && (
                             <button
                                 onClick={toggleSave}
                                 className={`mt-3 md:mt-4 flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm md:text-base ${isSaved
@@ -191,7 +191,7 @@ export default function JobDetails() {
                                 <FaHeart />
                                 {isSaved ? "Saved" : "Save Job"}
                             </button>
-                        )}
+                        )} */}
 
                     </div>
 

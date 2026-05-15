@@ -4,13 +4,21 @@ import AuthModal from "../components/AuthModal";
 import API from "../utils/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useSearchParams } from "react-router-dom";
+
 
 export default function FindJobs() {
+  const [searchParams] = useSearchParams();
   const [jobs, setJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [location, setLocation] = useState("");
+  const [search, setSearch] = useState(
+  searchParams.get("search") || ""
+);
+
+const [location, setLocation] = useState(
+  searchParams.get("location") || ""
+);
   const [salary, setSalary] = useState("");
   const [showAuth, setShowAuth] = useState(false);
 
@@ -131,16 +139,6 @@ export default function FindJobs() {
             className="w-full md:flex-1 border p-2 sm:p-3 rounded-lg outline-none text-sm"
           />
 
-          <select
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-            className="w-full md:flex-1 border p-2 sm:p-3 rounded-lg outline-none text-sm"
-          >
-            <option value="">Salary</option>
-            <option value="10000">10k+</option>
-            <option value="20000">20k+</option>
-            <option value="50000">50k+</option>
-          </select>
 
         </div>
       </div>
