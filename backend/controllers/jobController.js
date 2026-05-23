@@ -156,7 +156,7 @@ let getMyJobsApplicants = AsyncHandler(async (req, res) => {
     .populate({
       path: "applicants",
       select:
-        "name email phoneNumber experience educationLevel jobTitle languages profileImage resume",
+        "name email phoneNumber experience educationLevel jobTitle skills profileImage resume",
     })
     .sort({ createdAt: -1 });
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import AuthModal from "../components/AuthModal";
 import API from "../utils/api";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -18,6 +19,7 @@ export default function Home() {
   const [location, setLocation] = useState("");
   const [featuredJobs, setFeaturedJobs] = useState([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const role = localStorage.getItem("role");
 
@@ -111,6 +113,23 @@ export default function Home() {
 
     navigate(`/jobs?${params.toString()}`);
   };
+
+  const handleJobClick = (jobId) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (!token) {
+    setShowAuthModal(true);
+    return;
+  }
+
+  if (role === "employer") {
+    return;
+  }
+
+  // candidate login
+  navigate(`/job/${jobId}`);
+};
   return (
     <div className="bg-[#f5f7fc] min-h-screen overflow-x-hidden">
       <Navbar />
@@ -265,10 +284,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {featuredJobs.map((job, i) => (
-              <Link
-  to={`/job/${job._id}`}
+              <div
   key={job._id}
-  className="block"
+  onClick={() => handleJobClick(job._id)}
+  className="block cursor-pointer"
 >
                 <div
                   className="rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 items-start bg-gray-100 overflow-hidden"
@@ -344,7 +363,7 @@ export default function Home() {
                   </div>
 
                 </div>
-              </Link>
+              </div>
 
             ))}
 
@@ -572,6 +591,10 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {showAuthModal && (
+  <AuthModal onClose={() => setShowAuthModal(false)} />
+)}
 
       <Footer />
     </div>

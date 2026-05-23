@@ -3,6 +3,7 @@ import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 export default function AuthModal({ onClose }) {
   const [isLogin, setIsLogin] = useState(true);
   const [role, setRole] = useState("candidate");
@@ -97,7 +98,7 @@ export default function AuthModal({ onClose }) {
 
         {/* TITLE */}
         <h2 className="text-xl font-semibold text-center mb-6">
-          {isLogin ? "Login to Superio" : "Create a Free Account"}
+          {isLogin ? "Login to NEXT" : "Create a Free Account"}
         </h2>
 
         {/* ROLE SWITCH */}

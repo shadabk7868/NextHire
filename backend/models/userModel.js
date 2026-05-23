@@ -37,7 +37,7 @@ let userSchema = new mongoose.Schema({
             endingYear: Number,
         }
     ],
-    languages: String,
+    skills: String,
     role: { type: String, default: "candidate" },
     address: { country: String, state: String, dist: String, area: String, fullAddress: String },
     resume: { filename: String, url: String },

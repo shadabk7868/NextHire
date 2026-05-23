@@ -17,7 +17,7 @@
       currentSalary: "",
       expectedSalary: "",
       age: "",
-      languages: "",
+      skills: "",
       description: "",
       profileImage: ""
     });
@@ -62,7 +62,7 @@
           currentSalary: data.currentSalary || "",
           expectedSalary: data.expectedSalary || "",
           age: data.age || "",
-          languages: data.languages || "",
+          skills: data.skills || "",
           description: data.description || "",
           profileImage: data.profileImage?.url || "",
         });
@@ -96,7 +96,7 @@
   formData.append("currentSalary", form.currentSalary);
   formData.append("expectedSalary", form.expectedSalary);
   formData.append("age", form.age);
-  formData.append("languages", form.languages);
+  formData.append("skills", form.skills);
   formData.append("description", form.description);
 
   if (image) {
@@ -203,11 +203,11 @@
                   <p>Expected Salary per month: ₹{form.expectedSalary}</p>
                 </ProfileCard>
 
-                <ProfileCard title="Languages">
+                <ProfileCard title="skills">
 
                   <div className="flex flex-wrap gap-2">
 
-                    <p>{form.languages || "No languages added"}</p>
+                    <p>{form.skills || "No skills added"}</p>
 
                   </div>
 
@@ -286,17 +286,17 @@
 
               </div>
 
-              {/* LANGUAGES */}
+              {/* skills */}
 
               <div className="mt-6">
 
                 <label className="text-sm text-gray-600">
-                  Languages
+                  skills
                 </label>
 
                 <input
-                  name="languages"
-                  value={form.languages}
+                  name="skills"
+                  value={form.skills}
                   onChange={handleChange}
                   className="w-full mt-2 p-3 bg-[#f5f7fc] rounded-lg"
                 />

@@ -47,7 +47,7 @@ export default function ProfileView() {
           <p><b>Education:</b> {user.educationLevel}</p>
           <p><b>Salary:</b> {user.currentSalary} - {user.expectedSalary}</p>
           <p><b>Age:</b> {user.age}</p>
-          <p><b>Languages:</b> {user.languages?.join(", ")}</p>
+          <p><b>skills:</b> {user.skills?.join(", ")}</p>
         </div>
 
         {user.resume?.url && (

@@ -231,18 +231,20 @@ const applicantsCount = uniqueApplicants.length;
                     </div>
 
                     {/* SKILLS */}
-                    {candidate?.skills?.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {candidate.skills.map((skill, i) => (
-                          <span
-                            key={i}
-                            className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    {/* SKILLS */}
+{Array.isArray(candidate?.skills) &&
+  candidate.skills.length > 0 && (
+    <div className="flex flex-wrap gap-2 mt-4">
+      {candidate.skills.map((skill, i) => (
+        <span
+          key={i}
+          className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs"
+        >
+          {skill}
+        </span>
+      ))}
+    </div>
+)}
 
                     {/* RESUME */}
                     {candidate?.resume?.url && (

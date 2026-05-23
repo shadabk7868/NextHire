@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+
 export default function Footer() {
+
   const role = localStorage.getItem("role");
+
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <footer className="bg-white pt-14">
@@ -11,6 +20,7 @@ export default function Footer() {
         {/* LOGO + CONTACT */}
         <div>
           <img src="./real logo.jpeg" alt="" />
+
           <p className="mt-3 text-m text-gray-500 leading-9">
             Call us <span className="text-blue-600 font-medium">123 456 7890</span>
             <br />
@@ -33,6 +43,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/employers-dashboard?tab=post"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Post Job
@@ -42,6 +53,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/employers-dashboard?tab=appliedCandidates"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Browse Applicants
@@ -51,6 +63,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/employers-dashboard"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Dashboard
@@ -60,6 +73,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/employers-dashboard?tab=myjobs"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   My Jobs
@@ -81,6 +95,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/jobs"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Browse Jobs
@@ -90,6 +105,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/jobs"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Search Categories
@@ -99,6 +115,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/candidate-dashboard"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Candidate Dashboard
@@ -108,6 +125,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/candidate-dashboard"
+                  onClick={scrollTop}
                   className="hover:text-blue-600"
                 >
                   Applied Jobs
@@ -121,6 +139,7 @@ export default function Footer() {
 
         {/* ABOUT */}
         <div>
+
           <h3 className="font-semibold mb-8 text-gray-900">
             About Us
           </h3>
@@ -130,6 +149,7 @@ export default function Footer() {
             <li>
               <Link
                 to="/blog"
+                onClick={scrollTop}
                 className="hover:text-blue-600"
               >
                 Blog
@@ -139,6 +159,7 @@ export default function Footer() {
             <li>
               <Link
                 to="/contact"
+                onClick={scrollTop}
                 className="hover:text-blue-600"
               >
                 Contact
@@ -146,26 +167,11 @@ export default function Footer() {
             </li>
 
           </ul>
-        </div>
-
-      </div>
-
-      {/* BOTTOM */}
-      <div className="mt-14 border-t">
-        <div className="lg:px-[130px] px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-
-          <p>© 2026 Job Portal. All Right Reserved.</p>
-
-          <div className="flex gap-6 mt-3 md:mt-0">
-            <span className="hover:text-blue-600 cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-blue-600 cursor-pointer">Terms</span>
-            <span className="hover:text-blue-600 cursor-pointer">Cookies</span>
-          </div>
 
         </div>
+
       </div>
 
     </footer>
   );
 }
-
