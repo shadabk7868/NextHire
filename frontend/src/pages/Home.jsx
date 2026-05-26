@@ -230,7 +230,7 @@ export default function Home() {
 
             <div
               key={i}
-              className="rounded-2xl p-6 flex items-center gap-4 bg-white hover:shadow-md transition cursor-pointer"
+              className="rounded-2xl p-6 flex items-center gap-4 bg-white hover:shadow-md transition "
             >
 
               <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-blue-600 text-xl flex-shrink-0">

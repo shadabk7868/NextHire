@@ -65,14 +65,16 @@ export default function MyProfile() {
         skills: data.skills || "",
         description: data.description || "",
         profileImage:
-          data.profileImage?.url
-            ? data.profileImage.url.replace(
-              "http://localhost:4000",
-              "https://nexthire-i1hx.onrender.com"
-            )
-            : data.profileImage?.filename
-              ? `https://nexthire-i1hx.onrender.com/uploads/${data.profileImage.filename}`
-              : "",
+  data.profileImage?.url
+    ? data.profileImage.url.replace(
+        "http://localhost:4000",
+        "https://nexthire-i1hx.onrender.com"
+      )
+    : data.profileImage?.filename
+      ? `https://nexthire-i1hx.onrender.com/uploads/${data.profileImage.filename}`
+      : typeof data.profileImage === "string"
+        ? `https://nexthire-i1hx.onrender.com/uploads/${data.profileImage}`
+        : "",
       });
 
     } catch (err) {

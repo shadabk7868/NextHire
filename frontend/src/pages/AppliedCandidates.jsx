@@ -71,16 +71,40 @@ const applicantsCount = uniqueApplicants.length;
 
   // SAFE IMAGE HANDLER (no backend change needed)
   const getImage = (img) => {
-    if (!img) return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  if (!img) {
+    return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  }
 
-    if (typeof img === "string") return img;
+  // if image is string
+  if (typeof img === "string") {
 
-    return (
-      img.url ||
-      img.filename ||
-      "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+    // already full url
+    if (img.startsWith("http")) {
+      return img.replace(
+        "http://localhost:4000",
+        "https://nexthire-i1hx.onrender.com"
+      );
+    }
+
+    // uploads filename
+    return `https://nexthire-i1hx.onrender.com/uploads/${img}`;
+  }
+
+  // if object contains url
+  if (img.url) {
+    return img.url.replace(
+      "http://localhost:4000",
+      "https://nexthire-i1hx.onrender.com"
     );
-  };
+  }
+
+  // if object contains filename
+  if (img.filename) {
+    return `https://nexthire-i1hx.onrender.com/uploads/${img.filename}`;
+  }
+
+  return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+};
 
   return (
     <div className="bg-[#f5f7fc] min-h-screen p-4 md:p-6">

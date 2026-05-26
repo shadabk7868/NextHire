@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
 import API from "../utils/api";
 import Navbar from "../components/Navbar";
@@ -8,6 +9,7 @@ import { useSearchParams } from "react-router-dom";
 
 
 export default function FindJobs() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [jobs, setJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
@@ -96,6 +98,22 @@ const [location, setLocation] = useState(
     }
   };
 
+  const handleJobClick = (jobId) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (!token) {
+    setShowAuth(true);
+    return;
+  }
+
+  if (role === "employer") {
+    return;
+  }
+
+  navigate(`/job/${jobId}`);
+};
+
   const filteredJobs = jobs.filter((job) => {
     return (
       job.title?.toLowerCase().includes(search.toLowerCase()) &&
@@ -159,11 +177,11 @@ const [location, setLocation] = useState(
               const isApplied = appliedJobs.includes(job._id);
 
               return (
-                <Link
-                  to={`/job/${job._id}`}
-                  key={job._id}
-                  className="block"
-                >
+                <div
+  key={job._id}
+  onClick={() => handleJobClick(job._id)}
+  className="block cursor-pointer"
+>
                   <div className="bg-white p-4 sm:p-5 md:p-6 rounded-xl shadow-sm hover:shadow-md transition flex flex-col md:flex-row justify-between gap-4 sm:gap-5">
 
                     {/* LEFT */}
@@ -230,7 +248,7 @@ const [location, setLocation] = useState(
                     </div>
 
                   </div>
-                </Link>
+                </div>
               );
             })}
 

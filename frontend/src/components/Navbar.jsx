@@ -99,9 +99,7 @@ export default function Navbar() {
 
             {isLoggedIn && role === "employer" && (
               <NavLink to="/employers-dashboard?tab=post">
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-                  Post Job
-                </button>
+                
               </NavLink>
             )}
           </div>
@@ -195,9 +193,6 @@ export default function Navbar() {
                     to="/employers-dashboard?tab=post"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm w-full">
-                      Post Job
-                    </button>
                   </NavLink>
                 )}
               </nav>
