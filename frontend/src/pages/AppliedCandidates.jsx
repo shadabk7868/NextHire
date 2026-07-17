@@ -41,70 +41,70 @@ export default function AppliedCandidates({ jobId }) {
   }, [jobId]);
 
   useEffect(() => {
-  if (!jobs.length) return;
+    if (!jobs.length) return;
 
-  let jobToSelect = jobs[0];
+    let jobToSelect = jobs[0];
 
-  if (jobId) {
-    const found = jobs.find((j) => j._id === jobId);
-    if (found) jobToSelect = found;
-  }
+    if (jobId) {
+      const found = jobs.find((j) => j._id === jobId);
+      if (found) jobToSelect = found;
+    }
 
-  setSelectedJob(jobToSelect);
-}, [jobs, jobId]);
+    setSelectedJob(jobToSelect);
+  }, [jobs, jobId]);
 
   const uniqueApplicants = [
-  ...new Map(
-    (selectedJob?.applicants || []).map((item) => {
+    ...new Map(
+      (selectedJob?.applicants || []).map((item) => {
 
-      const key =
-        item?._id?.toString() ||
-        item?.email;
+        const key =
+          item?._id?.toString() ||
+          item?.email;
 
-      return [key, item];
+        return [key, item];
 
-    })
-  ).values(),
-];
+      })
+    ).values(),
+  ];
 
-const applicantsCount = uniqueApplicants.length;
+  const applicantsCount = uniqueApplicants.length;
 
   // SAFE IMAGE HANDLER (no backend change needed)
   const getImage = (img) => {
-  if (!img) {
-    return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-  }
+    if (!img) {
+      return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    }
 
-  // if image is string
-  if (typeof img === "string") {
+    // if image is string
+    if (typeof img === "string") {
 
-    // already full url
-    if (img.startsWith("http")) {
-      return img.replace(
+      // already full url
+      if (img.startsWith("http")) {
+        return img.replace(
+          "http://localhost:4000",
+          "https://nexthire-i1hx.onrender.com"
+        );
+      }
+
+      // uploads filename
+      return `https://nexthire-i1hx.onrender.com/uploads/${img}`;
+    }
+
+    // if object contains url
+    if (img.url) {
+      return img.url.replace(
         "http://localhost:4000",
         "https://nexthire-i1hx.onrender.com"
       );
     }
 
-    // uploads filename
-    return `https://nexthire-i1hx.onrender.com/uploads/${img}`;
-  }
+    // if object contains filename
+    if (img.filename) {
+      return `https://nexthire-i1hx.onrender.com/uploads/${img.filename}`;
+    }
 
-  // if object contains url
-  if (img.url) {
-    return img.url.replace(
-      "http://localhost:4000",
-      "https://nexthire-i1hx.onrender.com"
-    );
-  }
-
-  // if object contains filename
-  if (img.filename) {
-    return `https://nexthire-i1hx.onrender.com/uploads/${img.filename}`;
-  }
-
-  return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-};
+    return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  };
 
   return (
     <div className="bg-[#f5f7fc] min-h-screen p-4 md:p-6">
@@ -140,10 +140,9 @@ const applicantsCount = uniqueApplicants.length;
                   key={job._id}
                   onClick={() => setSelectedJob(job)}
                   className={`p-4 rounded-xl cursor-pointer transition border
-                    ${
-                      selectedJob?._id === job._id
-                        ? "bg-blue-100 border-blue-400"
-                        : "hover:bg-gray-50"
+                    ${selectedJob?._id === job._id
+                      ? "bg-blue-100 border-blue-400"
+                      : "hover:bg-gray-50"
                     }`}
                 >
                   <h3 className="font-semibold text-sm">
@@ -151,25 +150,25 @@ const applicantsCount = uniqueApplicants.length;
                   </h3>
 
                   <p className="text-xs text-gray-500 mt-1">
-  {
-    [
-      ...new Set(
-        (job?.applicants || []).map((item) => {
+                    {
+                      [
+                        ...new Set(
+                          (job?.applicants || []).map((item) => {
 
-          if (typeof item === "object") {
-            return (
-              item?._id?.toString() ||
-              item?.email
-            );
-          }
+                            if (typeof item === "object") {
+                              return (
+                                item?._id?.toString() ||
+                                item?.email
+                              );
+                            }
 
-          return item?.toString();
+                            return item?.toString();
 
-        })
-      ),
-    ].filter(Boolean).length
-  } Applicants
-</p>
+                          })
+                        ),
+                      ].filter(Boolean).length
+                    } Applicants
+                  </p>
                 </div>
               ))}
 
@@ -185,11 +184,11 @@ const applicantsCount = uniqueApplicants.length;
               </h2>
 
               <p className="text-gray-500 text-sm mt-1">
-  {applicantsCount} Applicants
-</p>
+                {applicantsCount} Applicants
+              </p>
             </div>
 
-            {!selectedJob || selectedJob?.applicants?.length === 0 ? (  
+            {!selectedJob || selectedJob?.applicants?.length === 0 ? (
               <div className="bg-white p-10 rounded-2xl shadow-sm text-center">
                 <p className="text-gray-500">
                   No candidates applied yet
@@ -256,24 +255,27 @@ const applicantsCount = uniqueApplicants.length;
 
                     {/* SKILLS */}
                     {/* SKILLS */}
-{Array.isArray(candidate?.skills) &&
-  candidate.skills.length > 0 && (
-    <div className="flex flex-wrap gap-2 mt-4">
-      {candidate.skills.map((skill, i) => (
-        <span
-          key={i}
-          className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs"
-        >
-          {skill}
-        </span>
-      ))}
-    </div>
-)}
+                    {Array.isArray(candidate?.skills) &&
+                      candidate.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {candidate.skills.map((skill, i) => (
+                            <span
+                              key={i}
+                              className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                     {/* RESUME */}
                     {candidate?.resume?.url && (
                       <a
-                        href={candidate.resume.url}
+                        href={candidate.resume.url.replace(
+                          "http://localhost:4000",
+                          "https://nexthire-i1hx.onrender.com"
+                        )}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
